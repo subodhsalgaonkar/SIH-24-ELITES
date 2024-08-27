@@ -6,6 +6,7 @@ import "./index.css";
 import "./App.css";
 import BuyerProfile from "./components/BuyerProfile";
 import LandingPage from "./components/LandingPage";
+import ItemInfo from "./components/ItemInfo";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -15,6 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/buyerprofile" element={<BuyerProfile />} />
+        <Route path="/ItemInfo" element={<ItemInfo />} />
       </Routes>
     </Router>
   );
