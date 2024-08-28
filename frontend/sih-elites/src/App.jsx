@@ -10,6 +10,7 @@ import Navbar from './components/Navbar';
 import BuyerDashboard from './pages/BuyerDashboard';
 import SellerDashboard from './pages/SellerDashboard';
 import ContractDetailsPage from './pages/ContractDetailsPage';
+import FarmersProfilePage from "./components/FarmersProfilePage";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -25,6 +26,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/buyerprofile" element={<BuyerProfile />} />
         <Route path="/ItemInfo" element={<ItemInfo />} />
+        <Route path="/FarmersPP" element={<FarmersProfilePage />} />
       </Routes>
     </Router>
   );
