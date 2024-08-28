@@ -90,13 +90,14 @@
 
 import React from "react";
 import wheatImg from "../Images/wheatImg.jpeg";
+import bg from "../Images/BuyerProfile.jpg";
 // import cornImg from "../Images/corn.jpg";
 // import tomatoesImg from "../Images/tomatoes.jpg";
 
 const FarmersProfilePage = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg overflow-hidden">
+    <div className="min-h-screen bg-lime-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-screen w-full bg-white shadow-lg rounded-lg overflow-hidden">
         {/* Header Section */}
         <div className="relative bg-green-500 p-8">
           <div className="absolute left-14 top-1/2 transform -translate-y-1/2">

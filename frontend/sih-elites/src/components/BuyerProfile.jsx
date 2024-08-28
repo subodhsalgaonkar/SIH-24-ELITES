@@ -5,9 +5,9 @@ import cucumber from "../Images/Cucumber.jpg";
 import leafygreens from "../Images/leafygreens.jpg";
 const BuyerProfile = () => {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="relative bg-blue-500 p-8">
+    <div className="min-h-screen bg-lime-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-screen w-full bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="relative bg-green-500 p-8">
           <div className="absolute left-14 top-1/2 transform -translate-y-1/2">
             <img
               src={bg}
