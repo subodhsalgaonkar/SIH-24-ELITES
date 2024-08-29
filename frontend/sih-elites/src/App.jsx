@@ -2,7 +2,7 @@ import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import "./index.css";
-import "./App.css";
+// import "./App.css";
 import BuyerProfile from "./components/BuyerProfile";
 import LandingPage from "./components/LandingPage";
 import ItemInfo from "./components/ItemInfo";
