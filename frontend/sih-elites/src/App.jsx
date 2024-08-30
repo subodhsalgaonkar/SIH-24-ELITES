@@ -11,6 +11,7 @@ import BuyerDashboard from './pages/BuyerDashboard';
 import SellerDashboard from './pages/SellerDashboard';
 import ContractDetailsPage from './pages/ContractDetailsPage';
 import FarmersProfilePage from "./components/FarmersProfilePage";
+import ContractForm from "./components/ContractForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -24,6 +25,7 @@ function App() {
         <Route path="/seller" element={<SellerDashboard />} />
         <Route path="/contract/:id" element={<ContractDetailsPage />} />
         <Route path="/" element={<LandingPage />} />
+        <Route path="/create-contract" element={<ContractForm />} />
         <Route path="/buyerprofile" element={<BuyerProfile />} />
         <Route path="/ItemInfo" element={<ItemInfo />} />
         <Route path="/FarmersPP" element={<FarmersProfilePage />} />

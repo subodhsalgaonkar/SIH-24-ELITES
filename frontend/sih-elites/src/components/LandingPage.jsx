@@ -12,8 +12,18 @@ const LandingPage = () => {
       >
         Buyer Profile
       </button>
+
       <div className="text-center mt-12">
         Hi, this is the Landing Page! Welcome to our website Farmer's Market!
+      </div>
+
+      <div className="text-center mt-12">
+        <button
+          onClick={() => navigate("/create-contract")}
+          className="bg-green-500 text-white px-6 py-3 rounded hover:bg-green-700 transition duration-200"
+        >
+          Create Contract
+        </button>
       </div>
     </div>
   );
