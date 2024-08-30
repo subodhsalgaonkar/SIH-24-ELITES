@@ -169,13 +169,13 @@ const Marketplace = () => {
           </datalist>
         </div>
       </div>
-
+            
       {/* Crop Cards */}
       <div className="w-3/4 p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredCrops.map(crop => (
           <div
             key={crop.id}
-            className="bg-white shadow-md rounded overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300"
+            className="bg-white shadow-md rounded overflow-hidden cursor-pointer hover:shadow-lg transition-shadow duration-300 max-h-40"
             onClick={() => navigate(`/crop/${crop.id}`)}
           >
             <div className="p-4 flex items-center">
