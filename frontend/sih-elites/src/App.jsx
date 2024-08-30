@@ -12,6 +12,8 @@ import SellerDashboard from './pages/SellerDashboard';
 import ContractDetailsPage from './pages/ContractDetailsPage';
 import FarmersProfilePage from "./components/FarmersProfilePage";
 import ContractForm from "./components/ContractForm";
+import Marketplace from "./components/Marketplace";
+import ProductDetailPage from "./components/ProductDetailPage";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,6 +23,7 @@ function App() {
     <Router>
       <Navbar role={userRole} />
       <Routes>
+        <Route path="/Marketplace" element={<Marketplace/>}/>
         <Route path="/buyer" element={<BuyerDashboard />} />
         <Route path="/seller" element={<SellerDashboard />} />
         <Route path="/contract/:id" element={<ContractDetailsPage />} />
@@ -29,6 +32,9 @@ function App() {
         <Route path="/buyerprofile" element={<BuyerProfile />} />
         <Route path="/ItemInfo" element={<ItemInfo />} />
         <Route path="/FarmersPP" element={<FarmersProfilePage />} />
+        <Route path="/crop/:id" element={<ProductDetailPage />} />
+        {/* <Route path="/conversation/:farmerName" element={<ConversationPage />} />
+        <Route path="/farmer/:farmerName" element={<FarmerProfile />} /> */}
       </Routes>
     </Router>
   );

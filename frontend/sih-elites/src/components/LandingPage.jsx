@@ -25,6 +25,15 @@ const LandingPage = () => {
           Create Contract
         </button>
       </div>
+
+      <div className="text-center mt-6">
+        <button
+          onClick={() => navigate("/marketplace")}
+          className="bg-yellow-500 text-white px-6 py-3 rounded hover:bg-yellow-700 transition duration-200"
+        >
+          Go to Marketplace
+        </button>
+      </div>
     </div>
   );
 };
