@@ -14,6 +14,10 @@ import FarmersProfilePage from "./components/FarmersProfilePage";
 import ContractForm from "./components/ContractForm";
 import Marketplace from "./components/Marketplace";
 import ProductDetailPage from "./components/ProductDetailPage";
+import RoleSelection from './components/RoleSelection';
+import FarmerSignup from './components/FarmerSignup';
+import BusinessSignup from './components/BusinessSignup';
+
 
 function App() {
   const [count, setCount] = useState(0);
@@ -23,6 +27,9 @@ function App() {
     <Router>
       <Navbar role={userRole} />
       <Routes>
+       <Route path="/" element={<RoleSelection />} />
+        <Route path="/farmer-signup/*" element={<FarmerSignup />} />
+        <Route path="/business-signup/*" element={<BusinessSignup />} />
         <Route path="/Marketplace" element={<Marketplace/>}/>
         <Route path="/buyer" element={<BuyerDashboard />} />
         <Route path="/seller" element={<SellerDashboard />} />
