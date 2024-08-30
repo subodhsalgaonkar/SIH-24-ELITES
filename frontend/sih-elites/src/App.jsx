@@ -32,16 +32,16 @@ function App() {
         <Route path="/farmer-signup/*" element={<FarmerSignup />} />
         <Route path="/business-signup/*" element={<BusinessSignup />} />
         <Route path="/Marketplace" element={<Marketplace/>}/>
-        <Route path="/Marketplace" element={<Marketplace />} />
+        {/* <Route path="/Marketplace" element={<Marketplace />} /> */}              {/* Ihte pan 2 marketplaces*/}
         <Route path="/buyer" element={<BuyerDashboard />} />
         <Route path="/seller" element={<SellerDashboard />} />
         <Route path="/contract/:id" element={<ContractDetailsPage />} />
-        <Route path="/" element={<LandingPage />} />
+        {/* <Route path="/" element={<LandingPage />} />                      PAGAL:   path taktana bagha tari eakdi 2 home aahe  */}
         <Route path="/create-contract" element={<ContractForm />} />
         <Route path="/buyerprofile" element={<BuyerProfile />} />
-        <Route path="/ItemInfo" element={<ItemInfo />} />
+        {/* <Route path="/ItemInfo" element={<ItemInfo />} /> */}
         <Route path="/FarmersPP" element={<FarmersProfilePage />} />
-        <Route path="/FarmersPPFarmerPOV" element={<FarmersPPFarmerPOV />} />
+        <Route path="/FarmersPPFarmerPOV" element={<FarmersPPFarmerPOV />}/>{/*Shintre problem aahe yaat kahi tari mala edit option not visible */}
         <Route path="/crop/:id" element={<ProductDetailPage />} />
         {/* <Route path="/conversation/:farmerName" element={<ConversationPage />} />
         <Route path="/farmer/:farmerName" element={<FarmerProfile />} /> */}
