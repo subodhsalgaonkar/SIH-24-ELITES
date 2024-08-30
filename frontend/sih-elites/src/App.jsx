@@ -6,24 +6,25 @@ import "./index.css";
 import BuyerProfile from "./components/BuyerProfile";
 import LandingPage from "./components/LandingPage";
 import ItemInfo from "./components/ItemInfo";
-import Navbar from './components/Navbar';
-import BuyerDashboard from './pages/BuyerDashboard';
-import SellerDashboard from './pages/SellerDashboard';
-import ContractDetailsPage from './pages/ContractDetailsPage';
+import Navbar from "./components/Navbar";
+import BuyerDashboard from "./pages/BuyerDashboard";
+import SellerDashboard from "./pages/SellerDashboard";
+import ContractDetailsPage from "./pages/ContractDetailsPage";
 import FarmersProfilePage from "./components/FarmersProfilePage";
 import ContractForm from "./components/ContractForm";
 import Marketplace from "./components/Marketplace";
 import ProductDetailPage from "./components/ProductDetailPage";
+import FarmersPPFarmerPOV from "./components/FarmersPPFarmerPOV";
 
 function App() {
   const [count, setCount] = useState(0);
-  const userRole = 'buyer';
+  const userRole = "buyer";
 
   return (
     <Router>
       <Navbar role={userRole} />
       <Routes>
-        <Route path="/Marketplace" element={<Marketplace/>}/>
+        <Route path="/Marketplace" element={<Marketplace />} />
         <Route path="/buyer" element={<BuyerDashboard />} />
         <Route path="/seller" element={<SellerDashboard />} />
         <Route path="/contract/:id" element={<ContractDetailsPage />} />
@@ -32,6 +33,7 @@ function App() {
         <Route path="/buyerprofile" element={<BuyerProfile />} />
         <Route path="/ItemInfo" element={<ItemInfo />} />
         <Route path="/FarmersPP" element={<FarmersProfilePage />} />
+        <Route path="/FarmersPPFarmerPOV" element={<FarmersPPFarmerPOV />} />
         <Route path="/crop/:id" element={<ProductDetailPage />} />
         {/* <Route path="/conversation/:farmerName" element={<ConversationPage />} />
         <Route path="/farmer/:farmerName" element={<FarmerProfile />} /> */}
