@@ -9,6 +9,12 @@ const NavbarFarmer = () => {
         <div className="font-bold text-xl">Farmer Connect</div>
         <div className="flex items-center">
           <Link
+            className="px-3 py-2 bg-slate-500 hover:bg-slate-600 rounded mr-4"
+            to="/create-contract"
+          >
+            Create Contract
+          </Link>
+          <Link
             className="px-3 py-2 bg-orange-500 hover:bg-orange-600 rounded mr-4"
             to="/seller"
           >

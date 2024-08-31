@@ -10,6 +10,12 @@ const Navbar = () => {
         <div className="flex items-center">
           <Link
             className="px-3 py-2 bg-orange-500 hover:bg-orange-600 rounded mr-4"
+            to="/create-contract"
+          >
+            Create Contract
+          </Link>
+          <Link
+            className="px-3 py-2 bg-orange-500 hover:bg-orange-600 rounded mr-4"
             to="/buyer"
           >
             Dashboard
