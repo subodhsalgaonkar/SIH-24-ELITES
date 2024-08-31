@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const FarmerSignup = () => {
   const [page, setPage] = useState(0);
   const navigate = useNavigate();
 
   const [farmerDetails, setFarmerDetails] = useState({
-    name: '',
-    email: '',
-    mobileNumber: '',
-    farmDescription: '',
-    birthday: '',
-    farmAddress: '',
-    cropsGrown: '',
+    name: "",
+    email: "",
+    mobileNumber: "",
+    farmDescription: "",
+    birthday: "",
+    farmAddress: "",
+    cropsGrown: "",
     farmImage: null,
   });
 
@@ -39,10 +39,9 @@ const FarmerSignup = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    // Handle the form submission here (e.g., send data to the backend)
-    console.log('Farmer Details Submitted:', farmerDetails);
-    navigate('/');
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    navigate("/farmersPPfarmerpov");
   };
 
   return (
