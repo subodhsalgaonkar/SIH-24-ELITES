@@ -35,7 +35,7 @@ const BuyerProfileBuyerPOV = () => {
     description:
       "Potharkar Lodge is a trusted company that buys quality produce from local suppliers.",
     paymentTerms:
-      "Payment terms are net 30 days from the date of invoice. We accept payments via bank transfer and major credit cards.",
+      "Payment will be offered via direct bank transfer or cash.",
     crops: ["Tomatoes", "Cucumbers", "Leafy Greens"],
   });
 

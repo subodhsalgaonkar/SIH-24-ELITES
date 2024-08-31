@@ -37,8 +37,9 @@ function App() {
         </Route>
 
         {/* Routes that use NavbarFarmer */}
+        <Route path="/" element={<RoleSelection />} />
         <Route element={<NavbarFarmerWrapper />}>
-          <Route path="/" element={<RoleSelection />} />
+         
           <Route path="/farmer-signup/*" element={<FarmerSignup />} />
           <Route path="/business-signup/*" element={<BusinessSignup />} />
           <Route path="/buyerprofile" element={<BuyerProfile />} />

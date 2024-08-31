@@ -79,8 +79,7 @@ const BuyerProfile = () => {
             Payment Terms
           </h2>
           <p className="text-gray-600 leading-relaxed">
-            Payment terms are net 30 days from the date of invoice. We accept
-            payments via bank transfer and major credit cards.
+            Payment will be offered via direct bank transfer or cash.
           </p>
         </div>
         <div className="p-6 bg-gray-50 border-t border-gray-200">

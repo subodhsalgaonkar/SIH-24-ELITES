@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import  FarmerSignup  from './FarmerSignup';
-import  BusinessSignup  from './BusinessSignup';
+import FarmerSignup from './FarmerSignup';
+import BusinessSignup from './BusinessSignup';
+import backgroundImage from '../Images/backgroundImage.jpg'; // Adjust the path as needed
 
 const RoleSelection = () => {
   const [role, setRole] = useState('');
@@ -10,9 +11,16 @@ const RoleSelection = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+    <div
+      className="min-h-screen flex flex-col items-center justify-center bg-gray-100"
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       {!role && (
-        <div className="p-8 bg-white shadow-lg rounded-lg">
+        <div className="p-8 bg-white shadow-lg rounded-lg bg-opacity-80">
           <h2 className="text-2xl font-bold mb-6">Select Your Role</h2>
           <button
             onClick={() => handleRoleSelect('farmer')}

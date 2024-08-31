@@ -189,8 +189,7 @@ const ProductDetailPage = () => {
           <h2 className="text-3xl font-bold mb-2">{crop.name}</h2>
           <p className="text-lg font-bold mb-2">Item Description</p>
           <p className="text-base mb-4">
-            nans asnna ansnnas ifhwheb hsgdnm egryeb gsba SD SDBS ANBASB BXSBX
-            LOREM IPSUM
+            Our Crops are grown from high quality genetically modified seeds.
           </p>
           <p className="text-base font-semibold mb-1">
             Producer:
