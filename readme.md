@@ -67,11 +67,6 @@ Farmer Connect is a multi-platform solution designed to empower farmers by provi
 
 ---
 
-## 📝 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
----
 
 ## 🤝 Contributing
 
@@ -81,7 +76,7 @@ Contributions are welcome! Please feel free to submit a Pull Request or raise an
 
 ## 💬 Contact
 
-For any inquiries, please reach out to [your-email@example.com](mailto:your-email@example.com) or create an issue on GitHub.
+For any inquiries, please reach out to subodhsalgaonkar12@gmail.com or create an issue on GitHub.
 
 ---
 
