@@ -1,6 +1,6 @@
 ---
 
-Farmer Connect
+Farmer Connect: 
 Farmer Connect is a multi-platform solution designed to empower farmers by providing a reliable marketplace to secure contracts and maintain stability in the market. This project aims to connect farmers directly with buyers, ensuring fair transactions and reducing the risks associated with traditional market access.
 ---
 
