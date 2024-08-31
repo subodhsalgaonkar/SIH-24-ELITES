@@ -50,168 +50,43 @@ const BuyerProfileBuyerPov = () => {
           </div>
 
           <div className="text-center mt-24">
-            {isEditing ? (
-              <input
-                type="text"
-                name="name"
-                value={profileInfo.name}
-                onChange={handleInputChange}
-                className="text-3xl font-extrabold text-white bg-transparent border-none outline-none"
-              />
-            ) : (
-              <h1 className="text-3xl font-extrabold text-white">
-                {profileInfo.name}
-              </h1>
-            )}
-            <button onClick={toggleEdit} className="ml-2 text-white">
-              ✏️
+            <h1 className="text-3xl font-extrabold text-white">
+              {profileInfo.name}
+            </h1>
+            <button
+              onClick={toggleEdit}
+              className="bg-white text-green-500 font-bold py-2 px-4 rounded mt-4"
+            >
+              Edit
             </button>
-            <p className="text-lg text-blue-200">
-              Business Type:{" "}
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="businessType"
-                  value={profileInfo.businessType}
-                  onChange={handleInputChange}
-                  className="bg-transparent border-none outline-none"
-                />
-              ) : (
-                profileInfo.businessType
-              )}
-            </p>
-            <p className="text-lg text-blue-200">
-              Company:{" "}
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="company"
-                  value={profileInfo.company}
-                  onChange={handleInputChange}
-                  className="bg-transparent border-none outline-none"
-                />
-              ) : (
-                profileInfo.company
-              )}
-            </p>
-            <p className="text-lg text-blue-200">
-              Location:{" "}
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="location"
-                  value={profileInfo.location}
-                  onChange={handleInputChange}
-                  className="bg-transparent border-none outline-none"
-                />
-              ) : (
-                profileInfo.location
-              )}
-            </p>
-            <p className="text-lg text-blue-200">
-              Contact Number:{" "}
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="contactNumber"
-                  value={profileInfo.contactNumber}
-                  onChange={handleInputChange}
-                  className="bg-transparent border-none outline-none"
-                />
-              ) : (
-                profileInfo.contactNumber
-              )}
-            </p>
-            <p className="text-lg text-blue-200">
-              Email:{" "}
-              {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={profileInfo.email}
-                  onChange={handleInputChange}
-                  className="bg-transparent border-none outline-none"
-                />
-              ) : (
-                profileInfo.email
-              )}
-            </p>
+            <p className="text-lg text-blue-200">Business Type: {profileInfo.businessType}</p>
+            <p className="text-lg text-blue-200">Company: {profileInfo.company}</p>
+            <p className="text-lg text-blue-200">Location: {profileInfo.location}</p>
+            <p className="text-lg text-blue-200">Contact Number: {profileInfo.contactNumber}</p>
+            <p className="text-lg text-blue-200">Email: {profileInfo.email}</p>
             <p className="text-lg text-blue-200">
               Website:{" "}
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="website"
-                  value={profileInfo.website}
-                  onChange={handleInputChange}
-                  className="bg-transparent border-none outline-none"
-                />
-              ) : (
-                <a
-                  href={profileInfo.website}
-                  className="underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {profileInfo.website}
-                </a>
-              )}
+              <a
+                href={profileInfo.website}
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {profileInfo.website}
+              </a>
             </p>
-            <p className="text-lg text-blue-200">
-              Business Registration Number:{" "}
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="businessRegNumber"
-                  value={profileInfo.businessRegNumber}
-                  onChange={handleInputChange}
-                  className="bg-transparent border-none outline-none"
-                />
-              ) : (
-                profileInfo.businessRegNumber
-              )}
-            </p>
-            <p className="text-lg text-blue-200">
-              Verified Status:{" "}
-              {isEditing ? (
-                <select
-                  name="verifiedStatus"
-                  value={profileInfo.verifiedStatus}
-                  onChange={handleInputChange}
-                  className="bg-transparent border-none outline-none"
-                >
-                  <option value="Verified">Verified</option>
-                  <option value="Pending">Pending</option>
-                </select>
-              ) : (
-                <span className="bg-green-200 text-green-800 px-2 py-1 rounded-full">
-                  {profileInfo.verifiedStatus}
-                </span>
-              )}
-            </p>
+            <p className="text-lg text-blue-200">Business Registration Number: {profileInfo.businessRegNumber}</p>
+            <p className="text-lg text-blue-200">Verified Status: {profileInfo.verifiedStatus}</p>
           </div>
         </div>
 
         <div className="p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
-          {isEditing ? (
-            <textarea
-              name="description"
-              value={profileInfo.description}
-              onChange={handleInputChange}
-              className="w-full text-gray-600 leading-relaxed bg-transparent border-none outline-none"
-            />
-          ) : (
-            <p className="text-gray-600 leading-relaxed">
-              {profileInfo.description}
-            </p>
-          )}
+          <p className="text-gray-600 leading-relaxed">{profileInfo.description}</p>
         </div>
 
         <div className="p-6 bg-gray-50 border-t border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            Preferred Products
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Preferred Products</h2>
           <div className="grid grid-cols-3 gap-8 text-center">
             {profileInfo.preferredProducts.map((product, index) => (
               <div key={index}>
@@ -232,54 +107,108 @@ const BuyerProfileBuyerPov = () => {
           </div>
         </div>
 
-        <div className="p-6 bg-gray-50 border-t border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            Payment Terms
-          </h2>
-          {isEditing ? (
-            <textarea
-              name="paymentTerms"
-              value={profileInfo.paymentTerms}
-              onChange={handleInputChange}
-              className="w-full text-gray-600 leading-relaxed bg-transparent border-none outline-none"
-            />
-          ) : (
-            <p className="text-gray-600 leading-relaxed">
-              {profileInfo.paymentTerms}
-            </p>
-          )}
-        </div>
-
-        {/* Contract Details Section - No Edit Option */}
-        <div className="p-6 bg-gray-50 border-t border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            Contract History
-          </h2>
-          <p className="text-gray-600 leading-relaxed">
-            Summary of previous contracts or transactions is available upon
-            request.
-          </p>
-        </div>
-
-        {/* Ratings and Reviews Section - No Edit Option */}
-        <div className="p-6 bg-gray-50 border-t border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            Ratings and Reviews
-          </h2>
-          <p className="text-gray-600 leading-relaxed">
-            Feedback from suppliers and clients is consistently positive,
-            highlighting the company's reliability and quality standards.
-          </p>
-        </div>
-
+        {/* Edit Modal */}
         {isEditing && (
-          <div className="p-6 bg-green-100 border-t border-green-200 text-right">
-            <button
-              onClick={updateProfile}
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
-            >
-              Update
-            </button>
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded shadow-lg w-1/2">
+              <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
+              <div className="space-y-4">
+                <input
+                  type="text"
+                  name="name"
+                  value={profileInfo.name}
+                  onChange={handleInputChange}
+                  placeholder="Name"
+                  className="w-full p-2 border rounded"
+                />
+                <input
+                  type="text"
+                  name="businessType"
+                  value={profileInfo.businessType}
+                  onChange={handleInputChange}
+                  placeholder="Business Type"
+                  className="w-full p-2 border rounded"
+                />
+                <input
+                  type="text"
+                  name="company"
+                  value={profileInfo.company}
+                  onChange={handleInputChange}
+                  placeholder="Company"
+                  className="w-full p-2 border rounded"
+                />
+                <input
+                  type="text"
+                  name="location"
+                  value={profileInfo.location}
+                  onChange={handleInputChange}
+                  placeholder="Location"
+                  className="w-full p-2 border rounded"
+                />
+                <input
+                  type="text"
+                  name="contactNumber"
+                  value={profileInfo.contactNumber}
+                  onChange={handleInputChange}
+                  placeholder="Contact Number"
+                  className="w-full p-2 border rounded"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  value={profileInfo.email}
+                  onChange={handleInputChange}
+                  placeholder="Email"
+                  className="w-full p-2 border rounded"
+                />
+                <input
+                  type="text"
+                  name="website"
+                  value={profileInfo.website}
+                  onChange={handleInputChange}
+                  placeholder="Website"
+                  className="w-full p-2 border rounded"
+                />
+                <input
+                  type="text"
+                  name="businessRegNumber"
+                  value={profileInfo.businessRegNumber}
+                  onChange={handleInputChange}
+                  placeholder="Business Registration Number"
+                  className="w-full p-2 border rounded"
+                />
+                <select
+                  name="verifiedStatus"
+                  value={profileInfo.verifiedStatus}
+                  onChange={handleInputChange}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="Verified">Verified</option>
+                  <option value="Pending">Pending</option>
+                </select>
+                <textarea
+                  name="description"
+                  value={profileInfo.description}
+                  onChange={handleInputChange}
+                  placeholder="Description"
+                  className="w-full p-2 border rounded"
+                />
+              </div>
+              <div className="text-right mt-4">
+                <button
+                  onClick={toggleEdit}
+                  className="bg-red-500 text-white py-2 px-4 rounded mr-2"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={updateProfile}
+                  className="bg-green-500 text-white py-2 px-4 rounded"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>

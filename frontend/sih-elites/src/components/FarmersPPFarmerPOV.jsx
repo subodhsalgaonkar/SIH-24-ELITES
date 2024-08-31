@@ -1,6 +1,16 @@
 import React, { useState } from "react";
 import wheatImg from "../Images/wheatImg.jpeg";
-import bg from "../Images/BuyerProfile.jpg";
+import Cucumber from "../Images/Cucumber.jpg";
+import tomatoImg from "../Images/Tomato.jpg";
+
+const allCrops = [
+  { name: "Wheat", img: wheatImg },
+  { name: "Cucumber", img: Cucumber },
+  { name: "Tomatoes", img: tomatoImg },
+  { name: "Rice", img: "https://i.brecorder.com/primary/2024/08/66d0cbbea0ad4.jpg" },
+  { name: "Barley", img: "https://media.post.rvohealth.io/wp-content/uploads/2020/08/1200x628_FACEBOOK_Is_Barley_Gluten-Free-1200x628.jpg" },
+  { name: "Potatoes", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6v6-5oWwpOH3jeOliF9RJObbpb9OAYn8IZw&s" },
+];
 
 const FarmersPPFarmerPOV = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -12,11 +22,11 @@ const FarmersPPFarmerPOV = () => {
     personalInfo:
       "John Doe is an experienced farmer with over 10 years of experience in organic farming.",
     farm: "Green Valley Farm",
-    crops: "Wheat, Corn, Tomatoes",
+    crops: "Wheat, Cucumber, Tomatoes",
     methods: "Organic, Hydroponic",
   });
 
-  const [newCrop, setNewCrop] = useState("");
+  const [selectedCrop, setSelectedCrop] = useState("");
   const [documents, setDocuments] = useState([
     { title: "Certification Document 1", status: "Verified" },
     { title: "Certification Document 2", status: "Pending" },
@@ -30,7 +40,6 @@ const FarmersPPFarmerPOV = () => {
 
   const handleSaveChanges = () => {
     setIsEditing(false);
-    // Implement your update logic here
   };
 
   const handleChange = (e, field) => {
@@ -38,12 +47,17 @@ const FarmersPPFarmerPOV = () => {
   };
 
   const handleAddCrop = () => {
-    if (newCrop) {
-      setFormData((prevData) => ({
-        ...prevData,
-        crops: `${prevData.crops}, ${newCrop}`,
-      }));
-      setNewCrop("");
+    if (selectedCrop) {
+      const cropNames = formData.crops.split(", ");
+      if (cropNames.includes(selectedCrop)) {
+        alert("This crop is already added!");
+      } else {
+        setFormData((prevData) => ({
+          ...prevData,
+          crops: `${prevData.crops}, ${selectedCrop}`,
+        }));
+      }
+      setSelectedCrop(""); // Reset dropdown
     }
   };
 
@@ -53,15 +67,32 @@ const FarmersPPFarmerPOV = () => {
 
   const handleAddDocument = () => {
     if (newDocument) {
-      // In a real application, you'd handle the file upload here.
       const newDoc = {
         title: newDocument.name,
-        status: "Pending", // Default status for new documents
+        status: "Pending",
       };
       setDocuments((prevDocs) => [...prevDocs, newDoc]);
       setNewDocument(null);
     }
   };
+
+  const renderCropImages = () => {
+    return formData.crops.split(", ").map((crop, index) => {
+      const cropData = allCrops.find((c) => c.name === crop);
+      return (
+        <img
+          key={index}
+          src={cropData ? cropData.img : wheatImg} // default image if not found
+          alt={crop}
+          className="w-24 h-24 rounded-full border-2 border-gray-300"
+        />
+      );
+    });
+  };
+
+  const availableCrops = allCrops.filter(
+    (crop) => !formData.crops.split(", ").includes(crop.name)
+  );
 
   return (
     <div className="min-h-screen bg-lime-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -89,7 +120,7 @@ const FarmersPPFarmerPOV = () => {
                 type="text"
                 value={formData.name}
                 onChange={(e) => handleChange(e, "name")}
-                className="bg-gray-200 p-2 rounded"
+                className="bg-gray-200 p-2 rounded block mx-auto mb-2"
               />
             ) : (
               <h1 className="text-3xl font-extrabold text-white">
@@ -97,28 +128,28 @@ const FarmersPPFarmerPOV = () => {
               </h1>
             )}
             {isEditing ? (
-              <div>
+              <div className="space-y-2">
                 <input
                   type="text"
                   value={formData.contact}
                   onChange={(e) => handleChange(e, "contact")}
-                  className="bg-gray-200 p-2 rounded mt-2"
+                  className="bg-gray-200 p-2 rounded block mx-auto"
                 />
                 <input
                   type="text"
                   value={formData.email}
                   onChange={(e) => handleChange(e, "email")}
-                  className="bg-gray-200 p-2 rounded mt-2"
+                  className="bg-gray-200 p-2 rounded block mx-auto"
                 />
                 <input
                   type="text"
                   value={formData.experience}
                   onChange={(e) => handleChange(e, "experience")}
-                  className="bg-gray-200 p-2 rounded mt-2"
+                  className="bg-gray-200 p-2 rounded block mx-auto"
                 />
               </div>
             ) : (
-              <div>
+              <div className="space-y-2">
                 <p className="text-lg text-green-200">
                   Contact: {formData.contact}
                 </p>
@@ -158,27 +189,32 @@ const FarmersPPFarmerPOV = () => {
                 type="text"
                 value={formData.farm}
                 onChange={(e) => handleChange(e, "farm")}
-                className="bg-gray-200 p-2 rounded mb-2"
+                className="bg-gray-200 p-2 rounded mb-2 block"
               />
               <input
                 type="text"
                 value={formData.crops}
                 onChange={(e) => handleChange(e, "crops")}
-                className="bg-gray-200 p-2 rounded mb-2"
+                className="bg-gray-200 p-2 rounded mb-2 block"
               />
               <input
                 type="text"
                 value={formData.methods}
                 onChange={(e) => handleChange(e, "methods")}
-                className="bg-gray-200 p-2 rounded mb-2"
+                className="bg-gray-200 p-2 rounded mb-2 block"
               />
-              <input
-                type="text"
-                value={newCrop}
-                onChange={(e) => setNewCrop(e.target.value)}
-                className="bg-gray-200 p-2 rounded mb-2"
-                placeholder="Add new crop"
-              />
+              <select
+                value={selectedCrop}
+                onChange={(e) => setSelectedCrop(e.target.value)}
+                className="bg-gray-200 p-2 rounded mb-2 block"
+              >
+                <option value="">Select a crop to add</option>
+                {availableCrops.map((crop, index) => (
+                  <option key={index} value={crop.name}>
+                    {crop.name}
+                  </option>
+                ))}
+              </select>
               <button
                 onClick={handleAddCrop}
                 className="bg-green-500 text-white p-2 rounded"
@@ -195,69 +231,41 @@ const FarmersPPFarmerPOV = () => {
                 <strong>Crops Grown:</strong> {formData.crops}
               </p>
               <p className="text-gray-600">
-                <strong>Farming Methods:</strong> {formData.methods}
+                <strong>Methods Used:</strong> {formData.methods}
               </p>
             </div>
           )}
-          <div className="flex gap-4 mt-4">
-            <img
-              src={wheatImg}
-              alt="Wheat"
-              className="w-24 h-24 rounded-full border-2 border-gray-300"
-            />
-          </div>
-        </div>
 
-        {/* Rating/Reviews Section */}
-        <div className="p-6 bg-gray-50 border-t border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
-            Rating/Reviews
-          </h2>
-          <p className="text-gray-600">
-            <strong>Rating:</strong> 4.5/5
-          </p>
-          <p className="text-gray-600">
-            <strong>Reviews:</strong>
-          </p>
-          <ul className="list-disc pl-5 text-gray-600">
-            <li>Excellent produce quality! - Alice</li>
-            <li>Very professional and timely delivery. - Bob</li>
-          </ul>
+          <div className="mt-4 flex flex-wrap gap-4">
+            {renderCropImages()}
+          </div>
         </div>
 
         {/* Documents Section */}
         <div className="p-6 bg-gray-50 border-t border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Documents</h2>
-          <p className="text-gray-600">
-            Verifiable document for organic farming certification available upon
-            request.
-          </p>
-          <div className="flex gap-4 mt-4">
+          <div className="flex flex-wrap gap-4">
             {documents.map((doc, index) => (
               <div
                 key={index}
-                className="bg-white border rounded-lg p-4 shadow-lg flex-1"
+                className="bg-white p-4 rounded shadow-md w-full max-w-xs"
               >
-                <h3 className="text-lg font-semibold">{doc.title}</h3>
+                <p className="text-gray-800 font-bold">{doc.title}</p>
                 <p
-                  className={`text-sm ${
+                  className={`${
                     doc.status === "Verified"
                       ? "text-green-600"
-                      : "text-red-600"
+                      : "text-yellow-600"
                   }`}
                 >
-                  {doc.status}
+                  Status: {doc.status}
                 </p>
               </div>
             ))}
           </div>
           {isEditing && (
             <div className="mt-4">
-              <input
-                type="file"
-                onChange={handleFileChange}
-                className="bg-gray-200 p-2 rounded"
-              />
+              <input type="file" onChange={handleFileChange} />
               <button
                 onClick={handleAddDocument}
                 className="bg-green-500 text-white p-2 rounded mt-2"
@@ -270,10 +278,10 @@ const FarmersPPFarmerPOV = () => {
 
         {/* Save Changes Button */}
         {isEditing && (
-          <div className="p-6 flex justify-end">
+          <div className="p-6 bg-gray-50 border-t border-gray-200 flex justify-end">
             <button
               onClick={handleSaveChanges}
-              className="bg-blue-500 text-white py-2 px-4 rounded"
+              className="bg-green-500 text-white py-2 px-4 rounded"
             >
               Save Changes
             </button>
