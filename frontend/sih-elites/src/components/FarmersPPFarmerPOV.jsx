@@ -7,9 +7,18 @@ const allCrops = [
   { name: "Wheat", img: wheatImg },
   { name: "Cucumber", img: Cucumber },
   { name: "Tomatoes", img: tomatoImg },
-  { name: "Rice", img: "https://i.brecorder.com/primary/2024/08/66d0cbbea0ad4.jpg" },
-  { name: "Barley", img: "https://media.post.rvohealth.io/wp-content/uploads/2020/08/1200x628_FACEBOOK_Is_Barley_Gluten-Free-1200x628.jpg" },
-  { name: "Potatoes", img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6v6-5oWwpOH3jeOliF9RJObbpb9OAYn8IZw&s" },
+  {
+    name: "Rice",
+    img: "https://i.brecorder.com/primary/2024/08/66d0cbbea0ad4.jpg",
+  },
+  {
+    name: "Barley",
+    img: "https://media.post.rvohealth.io/wp-content/uploads/2020/08/1200x628_FACEBOOK_Is_Barley_Gluten-Free-1200x628.jpg",
+  },
+  {
+    name: "Potatoes",
+    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6v6-5oWwpOH3jeOliF9RJObbpb9OAYn8IZw&s",
+  },
 ];
 
 const FarmersPPFarmerPOV = () => {
@@ -236,11 +245,25 @@ const FarmersPPFarmerPOV = () => {
             </div>
           )}
 
-          <div className="mt-4 flex flex-wrap gap-4">
-            {renderCropImages()}
-          </div>
+          <div className="mt-4 flex flex-wrap gap-4">{renderCropImages()}</div>
         </div>
 
+        {/* Rating/Reviews Section */}
+        <div className="p-6 bg-gray-50 border-t border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Rating/Reviews
+          </h2>
+          <p className="text-gray-600">
+            <strong>Rating:</strong> 4.5/5
+          </p>
+          <p className="text-gray-600">
+            <strong>Reviews:</strong>
+          </p>
+          <ul className="list-disc pl-5 text-gray-600">
+            <li>Excellent produce quality! - Alice</li>
+            <li>Very professional and timely delivery. - Bob</li>
+          </ul>
+        </div>
         {/* Documents Section */}
         <div className="p-6 bg-gray-50 border-t border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Documents</h2>
