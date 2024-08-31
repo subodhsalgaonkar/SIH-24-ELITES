@@ -1,13 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
+// Modal Component
+const Modal = ({ isOpen, onClose, onSubmit }) => {
+  if (!isOpen) return null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit();
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+      <div className="bg-white rounded-lg shadow-lg p-6 max-w-md mx-auto">
+        <h2 className="text-2xl font-bold mb-4">Start Negotiation</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Message:</label>
+            <textarea
+              className="w-full border rounded-lg p-2"
+              rows="4"
+              placeholder="Write your message here..."
+              required
+            ></textarea>
+          </div>
+          <div className="flex justify-end space-x-2">
+            <button
+              type="button"
+              className="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600"
+              onClick={onClose}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Sample crop data
-
-  //we need to add farmer_id in this data i.e in the info that we fectch form the db we should get farmer_id with id
+  // Sample crop data with farmer_id added
   const crops = [
     {
       id: 1,
@@ -110,14 +154,25 @@ const ProductDetailPage = () => {
     navigate(`/farmer/${encodeURIComponent(crop.farmer)}`);
   };
 
+  const handleStartNegotiation = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalSubmit = () => {
+    // Handle form submission (e.g., send a message to the server)
+    alert("Negotiation request send!");
+  };
+
   if (!crop) {
     return <p>Crop not found!</p>;
   }
 
   return (
-    
     <div className="flex flex-col min-h-screen bg-[#e6e7dc] p-6">
-      
       {/* Product Container */}
       <div className="bg-white rounded-lg shadow-lg p-6 flex flex-col sm:flex-row justify-between items-start">
         {/* Product Image */}
@@ -154,7 +209,7 @@ const ProductDetailPage = () => {
         {/* Start Negotiation Button */}
         <button
           className="mt-4 bg-orange-500 text-white py-2 px-4 rounded-lg self-start sm:self-center shadow-md hover:bg-orange-600 transition duration-300"
-          onClick={() => navigate(`/start-conversation/${crop.id}`)}
+          onClick={handleStartNegotiation}
         >
           Start Negotiation
         </button>
@@ -181,6 +236,13 @@ const ProductDetailPage = () => {
           ))}
         </div>
       </div>
+
+      {/* Modal for Negotiation */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onSubmit={handleModalSubmit}
+      />
     </div>
   );
 };
