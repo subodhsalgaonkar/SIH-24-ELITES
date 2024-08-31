@@ -151,7 +151,7 @@ const ProductDetailPage = () => {
 
   const handleFarmerClick = () => {
     // Navigate to the FarmerProfilePage with the farmer's name or ID
-    navigate(`/farmer/${encodeURIComponent(crop.farmer)}`);
+    navigate("/farmersprofile");
   };
 
   const handleStartNegotiation = () => {

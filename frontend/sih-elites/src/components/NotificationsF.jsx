@@ -1,14 +1,36 @@
-import React from "react";
-// import notificationImg from "../Images/notificationImg.jpeg"; // Placeholder image, replace as needed
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const NotificationsF = () => {
+  const [notificationStates, setNotificationStates] = useState({
+    1: { status: null },
+    2: { status: null },
+    3: { status: null },
+  });
+
+  const handleResponse = (id, response) => {
+    setNotificationStates((prev) => ({
+      ...prev,
+      [id]: { status: response },
+    }));
+  };
+
   const notifications = [
     {
       id: 1,
       title: "Negotiation Message",
-      message:
-        "Business Man Soham Potharkar has displayed a keen interest in your products. He wants to negotiate with you.",
+      message: (
+        <span>
+          Business Man{" "}
+          <Link to="/buyerprofile" className="text-blue-500 hover:underline">
+            Soham Potharkar
+          </Link>{" "}
+          has displayed a keen interest in your products. He wants to negotiate
+          with you.
+        </span>
+      ),
       date: "2024-08-30",
+      type: "negotiation", // Added type for conditional rendering
     },
     {
       id: 2,
@@ -77,6 +99,46 @@ const NotificationsF = () => {
                       {notification.date}
                     </p>
                   </div>
+                  {notification.type === "negotiation" && (
+                    <div className="flex-shrink-0 space-x-2 ml-auto">
+                      {notificationStates[notification.id]?.status ? (
+                        <span
+                          className={`font-semibold ${
+                            notificationStates[notification.id]?.status ===
+                            "accepted"
+                              ? "text-green-500"
+                              : "text-red-500"
+                          }`}
+                        >
+                          {notificationStates[notification.id]?.status
+                            .charAt(0)
+                            .toUpperCase() +
+                            notificationStates[notification.id]?.status.slice(
+                              1
+                            )}
+                        </span>
+                      ) : (
+                        <>
+                          <button
+                            className="bg-green-500 text-white px-4 py-2 rounded"
+                            onClick={() =>
+                              handleResponse(notification.id, "accepted")
+                            }
+                          >
+                            Accept
+                          </button>
+                          <button
+                            className="bg-red-500 text-white px-4 py-2 rounded"
+                            onClick={() =>
+                              handleResponse(notification.id, "rejected")
+                            }
+                          >
+                            Reject
+                          </button>
+                        </>
+                      )}
+                    </div>
+                  )}
                 </li>
               ))}
             </ul>

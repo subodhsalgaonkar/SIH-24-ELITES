@@ -17,25 +17,16 @@ const BuyerProfile = () => {
           </div>
 
           <div className="text-center mt-24">
-            <h1 className="text-3xl font-extrabold text-white">John Doe</h1>
-            <p className="text-lg text-blue-200">Business Type: Wholesaler</p>
-            <p className="text-lg text-blue-200">Company: Green Grow Ltd.</p>
-            <p className="text-lg text-blue-200">Location: Springfield, IL</p>
+            <h1 className="text-3xl font-extrabold text-white">
+              Soham Potharkar
+            </h1>
+            <p className="text-lg text-blue-200">Contact Number: +9876543210</p>
             <p className="text-lg text-blue-200">
-              Contact Number: +123 456 7890
+              Email: sohampotharkar@gmail.com
             </p>
-            <p className="text-lg text-blue-200">
-              Email: john.doe@greengrow.com
-            </p>
-            <p className="text-lg text-blue-200">
-              Website:{" "}
-              <a href="https://www.greengrow.com" className="underline">
-                www.greengrow.com
-              </a>
-            </p>
-            <p className="text-lg text-blue-200">
-              Business Registration Number: BRN123456
-            </p>
+            <p className="text-lg text-blue-200">Company: Potharkar Lodge</p>
+            <p className="text-lg text-blue-200">Location: Pune</p>
+
             <p className="text-lg text-blue-200">
               Verified Status:{" "}
               <span className="bg-green-200 text-green-800 px-2 py-1 rounded-full">
@@ -47,9 +38,8 @@ const BuyerProfile = () => {
         <div className="p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Description</h2>
           <p className="text-gray-600 leading-relaxed">
-            Green Grow Ltd. is a leading wholesaler specializing in organic
-            vegetables. We are committed to providing high-quality produce to
-            our clients and maintaining sustainable practices.
+            Potharkar Lodge is a trusted company that buys quality produce from
+            local suppliers.
           </p>
         </div>
         <div className="p-6 bg-gray-50 border-t border-gray-200">

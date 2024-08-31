@@ -32,7 +32,7 @@ function App() {
             element={<BuyerProfileBuyerPov />}
           />
           <Route path="/crop/:id" element={<ProductDetailPage />} />
-          <Route path="/farmer/:farmerName" element={<FarmersProfilePage />} />
+          <Route path="/farmersprofile" element={<FarmersProfilePage />} />
           <Route path="/notifications" element={<Notifications />} />
         </Route>
 

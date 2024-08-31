@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import wheatImg from "../Images/wheatImg.jpeg";
-import Cucumber from "../Images/Cucumber.jpg";
+import Corn from "./Supplies_Images/corn.webp";
 import tomatoImg from "../Images/Tomato.jpg";
 
 const allCrops = [
   { name: "Wheat", img: wheatImg },
-  { name: "Cucumber", img: Cucumber },
+  { name: "Corn", img: Corn },
   { name: "Tomatoes", img: tomatoImg },
   {
     name: "Rice",
@@ -24,14 +24,15 @@ const allCrops = [
 const FarmersPPFarmerPOV = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: "John Doe",
+    name: "Rajesh Kumar",
     contact: "+1234567890",
-    email: "john.doe@example.com",
+    email: "rajesh@gmail.com",
     experience: "10 years",
+    location: "Pune",
     personalInfo:
-      "John Doe is an experienced farmer with over 10 years of experience in organic farming.",
+      "Rajesh Kumar is an experienced farmer with over 10 years of experience in organic farming.",
     farm: "Green Valley Farm",
-    crops: "Wheat, Cucumber, Tomatoes",
+    crops: "Wheat, Corn, Tomatoes",
     methods: "Organic, Hydroponic",
   });
 
@@ -156,6 +157,12 @@ const FarmersPPFarmerPOV = () => {
                   onChange={(e) => handleChange(e, "experience")}
                   className="bg-gray-200 p-2 rounded block mx-auto"
                 />
+                <input
+                  type="text"
+                  value={formData.location}
+                  onChange={(e) => handleChange(e, "location")}
+                  className="bg-gray-200 p-2 rounded block mx-auto"
+                />
               </div>
             ) : (
               <div className="space-y-2">
@@ -167,6 +174,9 @@ const FarmersPPFarmerPOV = () => {
                 </p>
                 <p className="text-lg text-green-200">
                   Experience: {formData.experience}
+                </p>
+                <p className="text-lg text-green-200">
+                  Location: {formData.location}
                 </p>
               </div>
             )}
@@ -260,8 +270,8 @@ const FarmersPPFarmerPOV = () => {
             <strong>Reviews:</strong>
           </p>
           <ul className="list-disc pl-5 text-gray-600">
-            <li>Excellent produce quality! - Alice</li>
-            <li>Very professional and timely delivery. - Bob</li>
+            <li>Excellent produce quality! - Aditya</li>
+            <li>Very professional and timely delivery. - Jash</li>
           </ul>
         </div>
         {/* Documents Section */}
