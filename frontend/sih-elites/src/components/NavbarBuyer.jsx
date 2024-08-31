@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className="flex items-center">
           <Link
             className="px-3 py-2 bg-orange-500 hover:bg-orange-600 rounded mr-4"
-            to="/seller"
+            to="/buyer"
           >
             Dashboard
           </Link>

@@ -23,7 +23,7 @@ const NavbarFarmer = () => {
           </Link>
           <Link
             className="px-3 py-2 bg-yellow-500 hover:bg-yellow-600 rounded"
-            to="/notifications"
+            to="/notificationsf"
           >
             Notifications
           </Link>

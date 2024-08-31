@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BusinessSignup = () => {
   const [page, setPage] = useState(0);
   const navigate = useNavigate();
 
   const [businessDetails, setBusinessDetails] = useState({
-    businessName: '',
-    ownerName: '',
-    email: '',
-    phoneNumber: '',
-    businessAddress: '',
-    businessType: '',
-    description: '',
+    businessName: "",
+    ownerName: "",
+    email: "",
+    phoneNumber: "",
+    businessAddress: "",
+    businessType: "",
+    description: "",
   });
 
   const handleNext = () => {
@@ -31,10 +31,9 @@ const BusinessSignup = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    // Handle the form submission here (e.g., send data to the backend)
-    console.log('Business Details Submitted:', businessDetails);
-    navigate('/');
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    navigate("/buyerprofilebuyerpov");
   };
 
   return (
@@ -108,13 +107,28 @@ const BusinessSignup = () => {
         {page === 2 && (
           <div>
             <h2 className="text-xl font-bold mb-4">Review & Submit</h2>
-            <p><strong>Business Name:</strong> {businessDetails.businessName}</p>
-            <p><strong>Owner Name:</strong> {businessDetails.ownerName}</p>
-            <p><strong>Email:</strong> {businessDetails.email}</p>
-            <p><strong>Phone Number:</strong> {businessDetails.phoneNumber}</p>
-            <p><strong>Business Address:</strong> {businessDetails.businessAddress}</p>
-            <p><strong>Business Type:</strong> {businessDetails.businessType}</p>
-            <p><strong>Description:</strong> {businessDetails.description}</p>
+            <p>
+              <strong>Business Name:</strong> {businessDetails.businessName}
+            </p>
+            <p>
+              <strong>Owner Name:</strong> {businessDetails.ownerName}
+            </p>
+            <p>
+              <strong>Email:</strong> {businessDetails.email}
+            </p>
+            <p>
+              <strong>Phone Number:</strong> {businessDetails.phoneNumber}
+            </p>
+            <p>
+              <strong>Business Address:</strong>{" "}
+              {businessDetails.businessAddress}
+            </p>
+            <p>
+              <strong>Business Type:</strong> {businessDetails.businessType}
+            </p>
+            <p>
+              <strong>Description:</strong> {businessDetails.description}
+            </p>
           </div>
         )}
         <div className="flex justify-between mt-4">
