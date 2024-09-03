@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 const BusinessSignup = () => {
   const [page, setPage] = useState(0);
+  const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   const [businessDetails, setBusinessDetails] = useState({
@@ -15,8 +16,24 @@ const BusinessSignup = () => {
     description: "",
   });
 
+  const validatePage = () => {
+    const newErrors = {};
+    if (page === 0) {
+      if (!businessDetails.businessName) newErrors.businessName = "Business Name is required";
+      if (!businessDetails.ownerName) newErrors.ownerName = "Owner Name is required";
+      if (!businessDetails.email) newErrors.email = "Email is required";
+      if (!businessDetails.phoneNumber) newErrors.phoneNumber = "Phone Number is required";
+    } else if (page === 1) {
+      if (!businessDetails.businessAddress) newErrors.businessAddress = "Business Address is required";
+    }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleNext = () => {
-    setPage((prevPage) => prevPage + 1);
+    if (validatePage()) {
+      setPage((prevPage) => prevPage + 1);
+    }
   };
 
   const handlePrevious = () => {
@@ -29,11 +46,17 @@ const BusinessSignup = () => {
       ...prevDetails,
       [name]: value,
     }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "", // Clear error for the field being edited
+    }));
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
-    navigate("/buyerprofilebuyerpov");
+    e.preventDefault();
+    if (validatePage()) {
+      navigate("/buyerprofilebuyerpov");
+    }
   };
 
   return (
@@ -48,32 +71,36 @@ const BusinessSignup = () => {
               placeholder="Business Name"
               value={businessDetails.businessName}
               onChange={handleChange}
-              className="w-full p-2 mb-4 border rounded"
+              className="w-full p-2 mb-2 border rounded"
             />
+            {errors.businessName && <p className="text-red-500 text-sm mb-2">{errors.businessName}</p>}
             <input
               type="text"
               name="ownerName"
               placeholder="Owner Name"
               value={businessDetails.ownerName}
               onChange={handleChange}
-              className="w-full p-2 mb-4 border rounded"
+              className="w-full p-2 mb-2 border rounded"
             />
+            {errors.ownerName && <p className="text-red-500 text-sm mb-2">{errors.ownerName}</p>}
             <input
               type="email"
               name="email"
               placeholder="Email"
               value={businessDetails.email}
               onChange={handleChange}
-              className="w-full p-2 mb-4 border rounded"
+              className="w-full p-2 mb-2 border rounded"
             />
+            {errors.email && <p className="text-red-500 text-sm mb-2">{errors.email}</p>}
             <input
               type="text"
               name="phoneNumber"
               placeholder="Phone Number"
               value={businessDetails.phoneNumber}
               onChange={handleChange}
-              className="w-full p-2 mb-4 border rounded"
+              className="w-full p-2 mb-2 border rounded"
             />
+            {errors.phoneNumber && <p className="text-red-500 text-sm mb-2">{errors.phoneNumber}</p>}
           </div>
         )}
         {page === 1 && (
@@ -85,15 +112,16 @@ const BusinessSignup = () => {
               placeholder="Business Address"
               value={businessDetails.businessAddress}
               onChange={handleChange}
-              className="w-full p-2 mb-4 border rounded"
+              className="w-full p-2 mb-2 border rounded"
             />
+            {errors.businessAddress && <p className="text-red-500 text-sm mb-2">{errors.businessAddress}</p>}
             <input
               type="text"
               name="businessType"
               placeholder="Business Type"
               value={businessDetails.businessType}
               onChange={handleChange}
-              className="w-full p-2 mb-4 border rounded"
+              className="w-full p-2 mb-2 border rounded"
             />
             <textarea
               name="description"
@@ -120,8 +148,7 @@ const BusinessSignup = () => {
               <strong>Phone Number:</strong> {businessDetails.phoneNumber}
             </p>
             <p>
-              <strong>Business Address:</strong>{" "}
-              {businessDetails.businessAddress}
+              <strong>Business Address:</strong> {businessDetails.businessAddress}
             </p>
             <p>
               <strong>Business Type:</strong> {businessDetails.businessType}
