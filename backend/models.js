@@ -52,6 +52,7 @@ const FarmerSchema = new Schema({
         maxlength: 50,
         unique: true,
         required: true
+
     }
 });
 
