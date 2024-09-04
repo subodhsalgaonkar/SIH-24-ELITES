@@ -22,8 +22,15 @@ const Login = () => {
 
       const data = await response.json();
       if (response.ok) {
-        // If login is successful, navigate to the home page
-        navigate("/");
+        const user = data.user; // Assuming the server response contains the user object with role
+
+        if (user.role === "farmer") {
+          navigate("/farmerprofile");
+        } else if (user.role === "buyer") {
+          navigate("/buyerprofile");
+        } else {
+          setError("Unexpected role. Please contact support.");
+        }
       } else {
         setError(data.message || "An error occurred during login.");
       }

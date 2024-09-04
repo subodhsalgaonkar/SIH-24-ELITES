@@ -84,8 +84,12 @@ app.post('/api/signup', async (req, res) => {
         const user = new User({ username, password: hashedPassword, role });
         await user.save();
 
-        // Insert into Farmers or Buyers collection based on the role
+        // Insert into Buyers or Farmers collection based on the role
         if (role === 'buyer') {
+            // Ensure email is provided and unique
+            if (!email) {
+                return res.status(400).json({ message: 'Email is required for buyers' });
+            }
             await Buyer.create({ buyer_id: user._id, name, contact, email });
         } else if (role === 'farmer') {
             await Farmer.create({ farmer_id: user._id, name, contact, email });
@@ -94,9 +98,13 @@ app.post('/api/signup', async (req, res) => {
         res.status(201).json({ message: 'Signup successful' });
     } catch (error) {
         console.error('Server error:', error);
+        if (error.code === 11000) { // Duplicate key error
+            return res.status(400).json({ message: 'Duplicate key error' });
+        }
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 
 // Login route
 app.post('/api/login', async (req, res) => {
@@ -115,13 +123,22 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ message: 'Incorrect password' });
         }
 
-        // Respond with success
-        res.status(200).json({ message: 'Login successful' });
+        // Find role-specific details
+        let userDetails = {};
+        if (user.role === 'buyer') {
+            userDetails = await Buyer.findOne({ buyer_id: user._id });
+        } else if (user.role === 'farmer') {
+            userDetails = await Farmer.findOne({ farmer_id: user._id });
+        }
+
+        // Respond with success and user details
+        res.status(200).json({ message: 'Login successful', user: { ...user._doc, ...userDetails._doc } });
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });
+
 
 // Serve static files from 'uploads' directory
 app.use('/uploads', express.static('uploads'));

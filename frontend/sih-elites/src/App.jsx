@@ -49,7 +49,7 @@ function App() {
           <Route path="/create-contract" element={<ContractForm />} />
           <Route path="/seller" element={<SellerDashboard />} />
           <Route path="/contract/:id" element={<ContractDetailsPage />} />
-          <Route path="/farmersppfarmerpov" element={<FarmersPPFarmerPOV />} />
+          <Route path="/farmerprofile" element={<FarmersPPFarmerPOV />} />
           <Route path="/notificationsf" element={<NotificationsF />} />
         </Route>
       </Routes>
