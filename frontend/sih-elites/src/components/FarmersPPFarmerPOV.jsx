@@ -14,7 +14,7 @@ const FarmersPPFarmerPOV = () => {
     methods: "",
   });
 
-  const username = "rajeshkumar@gmail.com";
+  const id = localStorage.getItem("farmer_id");
 
   const [documents, setDocuments] = useState([]);
   const [newDocument, setNewDocument] = useState(null);
@@ -22,15 +22,16 @@ const FarmersPPFarmerPOV = () => {
   useEffect(() => {
     const fetchFarmerData = async () => {
       try {
-        console.log("Fetching data for username:", username);
-        const response = await axios.get(
-          `http://localhost:3000/farmer/${username}`
-        );
+        console.log("Fetching data for id:", id);// TODO: remove this later
+
+        const response = await axios.get(`http://localhost:3000/farmer/${id}`, {id});
 
         const farmerData = response.data;
 
+        console.log(farmerData);
+
         setFormData({
-          name: farmerData.Farmer_name,
+          name: farmerData.name,
           contact: farmerData.contact,
           email: farmerData.email,
           experience: farmerData.experience,

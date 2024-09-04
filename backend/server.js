@@ -51,12 +51,29 @@ app.post('/upload', upload.single('file'), (req, res) => {
     res.send({ filePath: `/uploads/${req.file.filename}` });
 });
 
-// Add this route to fetch farmer details by username
-app.get('/farmer/:username', async (req, res) => {
-    console.log('Received request for:', req.params.username);
+// Add this route to fetch farmer details by farmerid
+app.get('/farmer/:id', async (req, res) => {
+    console.log('Received request for:', req.params.id);    
     try {
-        const username = req.params.username;
-        const farmer = await Farmer.findOne({ username: username });
+        const id = req.params.id;
+        const farmer = await Farmer.findOne({ farmer_id: id });
+        if (!farmer) {
+            console.log('Farmer not found');
+            return res.status(404).send('Farmer not found');
+        }
+        res.json(farmer);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Add this route to fetch farmer details by buyerid
+app.get('/buyer/:id', async (req, res) => {
+    console.log('Received request for:', req.params.id);    
+    try {
+        const id = req.params.id;
+        const farmer = await Farmer.findOne({ farmer_id: id });
         if (!farmer) {
             console.log('Farmer not found');
             return res.status(404).send('Farmer not found');

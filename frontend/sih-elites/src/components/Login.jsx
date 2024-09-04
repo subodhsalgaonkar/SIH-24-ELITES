@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -12,21 +13,27 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await axios.post("http://localhost:3000/api/login", {username, password});
+      
+      console.log(response.data);
+      
+      // console.log(response.data.message == "Login successful");
+      
 
-      const data = await response.json();
-      if (response.ok) {
-        const user = data.user; // Assuming the server response contains the user object with role
+      // const data = await response.json();
+      if (response.data.message == "Login successful") {
+        
+        const user = response.data.user; // Assuming the server response contains the user object with role
+        
+       
+        localStorage.setItem('role', user.role); //add user role to the localstorage
+        
 
         if (user.role === "farmer") {
+          localStorage.setItem('farmer_id', user.farmer_id); //TODO: remove this from local storage when we logout
           navigate("/farmerprofile");
         } else if (user.role === "buyer") {
+          localStorage.setItem('buyer_id', user.buyer_id); //TODO: remove this from local storage when we logout
           navigate("/buyerprofile");
         } else {
           setError("Unexpected role. Please contact support.");
