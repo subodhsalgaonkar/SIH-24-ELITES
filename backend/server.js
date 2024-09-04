@@ -68,17 +68,17 @@ app.get('/farmer/:id', async (req, res) => {
     }
 });
 
-// Add this route to fetch farmer details by buyerid
+// Add this route to fetch buyer details by buyerid
 app.get('/buyer/:id', async (req, res) => {
     console.log('Received request for:', req.params.id);    
     try {
         const id = req.params.id;
-        const farmer = await Farmer.findOne({ farmer_id: id });
-        if (!farmer) {
-            console.log('Farmer not found');
-            return res.status(404).send('Farmer not found');
+        const buyer = await Buyer.findOne({ buyer_id: id });
+        if (!buyer) {
+            console.log('Buyer not found');
+            return res.status(404).send('Buyer not found');
         }
-        res.json(farmer);
+        res.json(buyer);
     } catch (error) {
         console.error('Server error:', error);
         res.status(500).send('Server error');

@@ -1,50 +1,69 @@
-import React, { useState } from "react";
-import tomato from "../Images/Tomato.jpg";
-import cucumber from "../Images/Cucumber.jpg";
-import leafygreens from "../Images/leafygreens.jpg";
-import wheatImg from "../Images/wheatImg.jpeg";
+import React, { useState, useEffect } from "react";
 import bg from "../Images/BuyerProfile.jpg";
+import axios from "axios";
 
-const allCrops = [
-  { name: "Tomatoes", img: tomato },
-  { name: "Cucumbers", img: cucumber },
-  { name: "Leafy Greens", img: leafygreens },
-  { name: "Wheat", img: wheatImg },
-  {
-    name: "Rice",
-    img: "https://i.brecorder.com/primary/2024/08/66d0cbbea0ad4.jpg",
-  },
-  {
-    name: "Barley",
-    img: "https://media.post.rvohealth.io/wp-content/uploads/2020/08/1200x628_FACEBOOK_Is_Barley_Gluten-Free-1200x628.jpg",
-  },
-  {
-    name: "Potatoes",
-    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6v6-5oWwpOH3jeOliF9RJObbpb9OAYn8IZw&s",
-  },
-];
+const allCrops = [];
 
 const BuyerProfileBuyerPOV = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: "Soham Potharkar",
-    contact: "+9876543210",
-    email: "sohampotharkar@gmail.com",
-    company: "Potharkar Lodge",
-    location: "Pune",
+    name: "",
+    contact: "",
+    email: "",
+    company: "",
+    location: "",
     description:
-      "Potharkar Lodge is a trusted company that buys quality produce from local suppliers.",
+      "",
     paymentTerms:
-      "Payment will be offered via direct bank transfer or cash.",
-    crops: ["Tomatoes", "Cucumbers", "Leafy Greens"],
+      "",
+    crops: [""],
   });
 
   const [selectedCrop, setSelectedCrop] = useState("");
-  const [documents, setDocuments] = useState([
-    { title: "Business License", status: "Verified" },
-    { title: "Insurance Certificate", status: "Pending" },
-  ]);
+  const [documents, setDocuments] = useState([]);
   const [newDocument, setNewDocument] = useState(null);
+
+  
+  const id = localStorage.getItem("buyer_id");// TODO: Remove this from local storage 
+
+
+  useEffect(() => {
+    const fetchBuyerData = async () => {
+      try {
+        console.log("Fetching buyer data for id:", id);// TODO: remove this later
+
+        const response = await axios.get(`http://localhost:3000/buyer/${id}`, {id});
+
+        const buyerData = response.data;
+
+        console.log(buyerData);
+
+        setFormData({
+          name: buyerData.name,
+          contact: buyerData.contact,
+          email: buyerData.email,
+          company: buyerData.company,
+          location: buyerData.address,
+          description: buyerData.description,
+        });
+
+        // Set documents if available
+        setDocuments(buyerData.documents || []); // Adjust if documents are part of the response
+      } catch (error) {
+        if (error.response) {
+          console.error("Error response data:", error.response.data);
+          console.error("Error response status:", error.response.status);
+          console.error("Error response headers:", error.response.headers);
+        } else if (error.request) {
+          console.error("Error request data:", error.request);
+        } else {
+          console.error("Error message:", error.message);
+        }
+      }
+    };
+
+    fetchBuyerData();
+  }, []);
 
   const handleEditClick = () => {
     setIsEditing((prevState) => !prevState);

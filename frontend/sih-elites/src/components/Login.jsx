@@ -34,7 +34,7 @@ const Login = () => {
           navigate("/farmerprofile");
         } else if (user.role === "buyer") {
           localStorage.setItem('buyer_id', user.buyer_id); //TODO: remove this from local storage when we logout
-          navigate("/buyerprofile");
+          navigate("/buyerprofilebuyerpov");
         } else {
           setError("Unexpected role. Please contact support.");
         }

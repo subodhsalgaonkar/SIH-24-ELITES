@@ -14,10 +14,11 @@ const FarmersPPFarmerPOV = () => {
     methods: "",
   });
 
-  const id = localStorage.getItem("farmer_id");
-
+  
   const [documents, setDocuments] = useState([]);
   const [newDocument, setNewDocument] = useState(null);
+  
+  const id = localStorage.getItem("farmer_id"); // Remove this from localstorage
 
   useEffect(() => {
     const fetchFarmerData = async () => {

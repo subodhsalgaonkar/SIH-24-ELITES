@@ -57,7 +57,7 @@ const BuyerSchema = new Schema({
         maxlength: 100
     },
     preferred_products: {
-        type: String // 'text' corresponds to 'String' in Mongoose
+        type: [String] // 'text' corresponds to 'String' in Mongoose
     },
     image: {
         type: String // Assuming the image URL is stored as a string
