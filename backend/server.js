@@ -10,7 +10,9 @@ import { Farmer, Buyer, User } from './models.js'; // Ensure this path is correc
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const uri = 'mongodb+srv://shintreaditya05:aditya%40123@sih-elites.zdjd4.mongodb.net/';
+// const uri = 'mongodb+srv://shintreaditya05:aditya%40123@sih-elites.zdjd4.mongodb.net/';
+const uri = 'mongodb+srv://salgaonkarsubodh:Subodh%402004@sih-elites.zdjd4.mongodb.net/Farmers_Connect?retryWrites=true&w=majority';
+
 
 // Middleware to parse JSON bodies
 app.use(express.json());
