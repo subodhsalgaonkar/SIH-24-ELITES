@@ -2,10 +2,13 @@ import { Schema, model } from 'mongoose'
 
 const FarmerSchema = new Schema({
 
-    Farmer_name: {
+    name: {
         type: String,
-        maxlength: 100,
-        required: true
+        maxlength: 100
+    },
+    farmer_id: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     farm_name: {
         type: String,
@@ -39,32 +42,19 @@ const FarmerSchema = new Schema({
     },
     contact: {
         type: String,
-        required: true,
         unique: true,
         maxlength: 100
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    username: {
-        type: String,
-        maxlength: 50,
-        unique: true,
-        required: true
-
     }
 });
 
 const BuyerSchema = new Schema({
     buyer_id: {
         type: Schema.Types.ObjectId,
-        auto: true
+        ref: 'User'
     },
     name: {
         type: String,
-        maxlength: 100,
-        required: true
+        maxlength: 100
     },
     preferred_products: {
         type: String // 'text' corresponds to 'String' in Mongoose
@@ -89,30 +79,15 @@ const BuyerSchema = new Schema({
     email: {
         type: String,
         maxlength: 50,
-        required: true,
         unique: true
     },
     contact: {
         type: String,
         maxlength: 100
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    username: {
-        type: String,
-        maxlength: 50,
-        unique: true,
-        required: true
     }
 });
 
 const ContractSchema = new Schema({
-    contract_id: {
-        type: Schema.Types.ObjectId,
-        auto: true
-    },
     quantity: {
         type: Number, // 'long int()' corresponds to 'Number' in Mongoose
         required: true
@@ -141,10 +116,6 @@ const ContractSchema = new Schema({
 });
 
 const CropSchema = new Schema({
-    crop_id: {
-        type: Schema.Types.ObjectId,
-        auto: true
-    },
     name: {
         type: String,
         maxlength: 100,
@@ -234,10 +205,6 @@ const DocumentSchema = new Schema({
         type: String, // Assuming the document URL is stored as a string
         required: true
     },
-    document_id: {
-        type: Schema.Types.ObjectId,
-        auto: true
-    },
     verification_status: {
         type: Boolean,
         default: false
@@ -248,23 +215,7 @@ const DocumentSchema = new Schema({
     }
 });
 
-const AdminSchema = new Schema({
-    gov_admin_id: {
-        type: Schema.Types.ObjectId,
-        auto: true
-    },
-    buyer_id: {
-        type: Schema.Types.ObjectId
-    },
-    farmer_id: {
-        type: Schema.Types.ObjectId
-    },
-    contract_id: {
-        type: Schema.Types.ObjectId
-    },
-    document_id: {
-        type: Schema.Types.ObjectId
-    },
+const UserSchema = new Schema({
     username: {
         type: String,
         maxlength: 60,
@@ -274,10 +225,15 @@ const AdminSchema = new Schema({
     password: {
         type: String,
         required: true
+    },
+
+    role: {
+        type: String,
+        required: true
     }
 });
 
-const Admin = model('Admin', AdminSchema);
+const User = model('User', UserSchema);
 const Document = model('Document', DocumentSchema);
 const Message = model('Message', MessageSchema);
 const Review = model('Review', ReviewSchema);
@@ -286,4 +242,4 @@ const Contract = model('Contract', ContractSchema);
 const Buyer = model('Buyer', BuyerSchema);
 const Farmer = model('Farmer', FarmerSchema);
 
-export { Buyer, Farmer, Contract, Crop, Review, Message, Document, Admin };
+export { Buyer, Farmer, Contract, Crop, Review, Message, Document, User };

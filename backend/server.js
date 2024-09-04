@@ -3,9 +3,10 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import multer from 'multer';
 import path from 'path';
+import bcrypt from 'bcrypt'; // To hash passwords
 
-// Import the Farmer model from models.js
-import { Farmer } from './models.js'; // Ensure this path is correct
+// Import the models from models.js
+import { Farmer, Buyer, User } from './models.js'; // Ensure this path is correct
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -42,7 +43,6 @@ const upload = multer({ storage: storage });
 
 // Define your upload route
 app.post('/upload', upload.single('file'), (req, res) => {
-    // 'file' is the name of the form field
     if (!req.file) {
         return res.status(400).send('No file uploaded.');
     }
@@ -66,8 +66,62 @@ app.get('/farmer/:username', async (req, res) => {
     }
 });
 
+// Signup route
+app.post('/api/signup', async (req, res) => {
+    const { username, password, role, name, contact, email } = req.body;
 
+    try {
+        // Check if username already exists
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Username is already taken' });
+        }
 
+        // Hash the password before saving
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create and save the new user
+        const user = new User({ username, password: hashedPassword, role });
+        await user.save();
+
+        // Insert into Farmers or Buyers collection based on the role
+        if (role === 'buyer') {
+            await Buyer.create({ buyer_id: user._id, name, contact, email });
+        } else if (role === 'farmer') {
+            await Farmer.create({ farmer_id: user._id, name, contact, email });
+        }
+
+        res.status(201).json({ message: 'Signup successful' });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Login route
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        // Find the user by username
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: 'User does not exist. Sign up first.' });
+        }
+
+        // Compare the hashed password with the provided password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Incorrect password' });
+        }
+
+        // Respond with success
+        res.status(200).json({ message: 'Login successful' });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 // Serve static files from 'uploads' directory
 app.use('/uploads', express.static('uploads'));

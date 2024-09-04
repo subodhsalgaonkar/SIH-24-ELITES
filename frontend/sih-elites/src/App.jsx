@@ -18,6 +18,8 @@ import BusinessSignup from "./components/BusinessSignup";
 import FarmersPPFarmerPOV from "./components/FarmersPPFarmerPOV";
 import Notifications from "./components/Notifications";
 import NotificationsF from "./components/NotificationsF";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
 
 function App() {
   return (
@@ -38,8 +40,9 @@ function App() {
 
         {/* Routes that use NavbarFarmer */}
         <Route path="/" element={<RoleSelection />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
         <Route element={<NavbarFarmerWrapper />}>
-         
           <Route path="/farmer-signup/*" element={<FarmerSignup />} />
           <Route path="/business-signup/*" element={<BusinessSignup />} />
           <Route path="/buyerprofile" element={<BuyerProfile />} />
