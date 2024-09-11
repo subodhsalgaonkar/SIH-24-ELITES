@@ -13,7 +13,6 @@ const PORT = process.env.PORT || 3000;
 // const uri = 'mongodb+srv://shintreaditya05:aditya%40123@sih-elites.zdjd4.mongodb.net/';
 const uri = 'mongodb+srv://salgaonkarsubodh:Subodh%402004@sih-elites.zdjd4.mongodb.net/Farmers_Connect?retryWrites=true&w=majority';
 
-
 // Middleware to parse JSON bodies
 app.use(express.json());
 
@@ -49,40 +48,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
         return res.status(400).send('No file uploaded.');
     }
     res.send({ filePath: `/uploads/${req.file.filename}` });
-});
-
-// Add this route to fetch farmer details by farmerid
-app.get('/farmer/:id', async (req, res) => {
-    console.log('Received request for:', req.params.id);    
-    try {
-        const id = req.params.id;
-        const farmer = await Farmer.findOne({ farmer_id: id });
-        if (!farmer) {
-            console.log('Farmer not found');
-            return res.status(404).send('Farmer not found');
-        }
-        res.json(farmer);
-    } catch (error) {
-        console.error('Server error:', error);
-        res.status(500).send('Server error');
-    }
-});
-
-// Add this route to fetch buyer details by buyerid
-app.get('/buyer/:id', async (req, res) => {
-    console.log('Received request for:', req.params.id);    
-    try {
-        const id = req.params.id;
-        const buyer = await Buyer.findOne({ buyer_id: id });
-        if (!buyer) {
-            console.log('Buyer not found');
-            return res.status(404).send('Buyer not found');
-        }
-        res.json(buyer);
-    } catch (error) {
-        console.error('Server error:', error);
-        res.status(500).send('Server error');
-    }
 });
 
 // Signup route
@@ -124,7 +89,6 @@ app.post('/api/signup', async (req, res) => {
     }
 });
 
-
 // Login route
 app.post('/api/login', async (req, res) => {
     const { username, password } = req.body;
@@ -154,6 +118,94 @@ app.post('/api/login', async (req, res) => {
         res.status(200).json({ message: 'Login successful', user: { ...user._doc, ...userDetails._doc } });
     } catch (error) {
         console.error('Server error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Fetch farmer details by farmerid
+app.get('/farmer/:id', async (req, res) => {
+    console.log('Received request for:', req.params.id);
+    try {
+        const id = req.params.id;
+        const farmer = await Farmer.findOne({ farmer_id: id });
+        if (!farmer) {
+            console.log('Farmer not found');
+            return res.status(404).send('Farmer not found');
+        }
+        res.json(farmer);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Fetch buyer details by buyerid
+app.get('/buyer/:id', async (req, res) => {
+    console.log('Received request for:', req.params.id);
+    try {
+        const id = req.params.id;
+        const buyer = await Buyer.findOne({ buyer_id: id });
+        if (!buyer) {
+            console.log('Buyer not found');
+            return res.status(404).send('Buyer not found');
+        }
+        res.json(buyer);
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).send('Server error');
+    }
+});
+
+// Update farmer's documents
+app.post("/updateFarmer/:id", async (req, res) => {
+    const { id } = req.params;
+    const { documents } = req.body; // Expecting documents to be an array of document objects
+    try {
+        const farmer = await Farmer.findOne({ farmer_id: id });
+        if (!farmer) {
+            return res.status(404).json({ message: "Farmer not found" });
+        }
+
+        // Update farmer's documents
+        farmer.documents = documents;
+        const updatedFarmer = await farmer.save();
+
+        res.status(200).json(updatedFarmer);
+    } catch (error) {
+        console.error('Error updating farmer:', error);
+        res.status(500).json({ message: "Error updating data" });
+    }
+});
+
+// Update document title
+app.post('/updateDocument/:id/:docId', async (req, res) => {
+    const { id, docId } = req.params;
+    const { title } = req.body;
+
+    // Detailed logging for debugging
+    console.log(`Received farmerId: ${id}`);
+    console.log(`Received docId: ${docId}`);
+    console.log(`Received title: ${title}`);
+
+    // Check for missing parameters or body fields
+    if (!id || !docId || !title) {
+        return res.status(400).json({ message: 'Invalid request parameters' });
+    }
+
+    try {
+        // Update the document title
+        const result = await Farmer.updateOne(
+            { farmer_id: id, 'documents._id': docId },
+            { $set: { 'documents.$.title': title } }
+        );
+
+        if (result.nModified > 0) {
+            res.status(200).json({ message: 'Document title updated successfully' });
+        } else {
+            res.status(404).json({ message: 'Document not found or no changes made' });
+        }
+    } catch (error) {
+        console.error('Error updating document title:', error);
         res.status(500).json({ message: 'Server error' });
     }
 });

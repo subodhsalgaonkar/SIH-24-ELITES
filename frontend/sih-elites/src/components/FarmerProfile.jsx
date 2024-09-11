@@ -1,71 +1,70 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // Make sure to install axios using npm or yarn
+import axios from "axios";
 
-const FarmersPPFarmerPOV = () => {
+const FarmerProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     contact: "",
     email: "",
     experience: "",
-    location: "",
+    address: "",
     personalInfo: "",
     farm: "",
     methods: "",
   });
-
-  
   const [documents, setDocuments] = useState([]);
   const [newDocument, setNewDocument] = useState(null);
-  
-  const id = localStorage.getItem("farmer_id"); // Remove this from localstorage
+
+  const id = localStorage.getItem("farmer_id");
 
   useEffect(() => {
     const fetchFarmerData = async () => {
       try {
-        console.log("Fetching data for id:", id);// TODO: remove this later
-
-        const response = await axios.get(`http://localhost:3000/farmer/${id}`, {id});
-
+        const response = await axios.get(`http://localhost:3000/farmer/${id}`);
         const farmerData = response.data;
-
-        console.log(farmerData);
 
         setFormData({
           name: farmerData.name,
           contact: farmerData.contact,
           email: farmerData.email,
           experience: farmerData.experience,
-          location: farmerData.address,
-          personalInfo: farmerData.personal_info,
-          farm: farmerData.farm_name,
-          methods: farmerData.methods_used,
+          address: farmerData.address,
+          personalInfo: farmerData.personalInfo,
+          farm: farmerData.farm,
+          methods: farmerData.methods,
         });
 
-        // Set documents if available
-        setDocuments(farmerData.documents || []); // Adjust if documents are part of the response
+        setDocuments(farmerData.documents || []);
       } catch (error) {
-        if (error.response) {
-          console.error("Error response data:", error.response.data);
-          console.error("Error response status:", error.response.status);
-          console.error("Error response headers:", error.response.headers);
-        } else if (error.request) {
-          console.error("Error request data:", error.request);
-        } else {
-          console.error("Error message:", error.message);
-        }
+        console.error("Error fetching farmer data:", error);
       }
     };
 
     fetchFarmerData();
-  }, []);
+  }, [id]);
 
   const handleEditClick = () => {
     setIsEditing((prevState) => !prevState);
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     setIsEditing(false);
+    try {
+      const updatedData = { ...formData, documents };
+      const response = await axios.post(
+        `http://localhost:3000/updateFarmer/${id}`,
+        updatedData
+      );
+
+      if (response.status === 200) {
+        console.log("Changes saved successfully", response.data);
+      } else {
+        console.error("Failed to save changes", response.data);
+      }
+    } catch (error) {
+      console.error("Error saving changes:", error);
+    }
   };
 
   const handleChange = (e, field) => {
@@ -78,12 +77,62 @@ const FarmersPPFarmerPOV = () => {
 
   const handleAddDocument = () => {
     if (newDocument) {
-      const newDoc = {
-        title: newDocument.name,
-        status: "Pending",
-      };
-      setDocuments((prevDocs) => [...prevDocs, newDoc]);
-      setNewDocument(null);
+      const formData = new FormData();
+      formData.append("file", newDocument);
+
+      axios
+        .post("http://localhost:3000/upload", formData)
+        .then((response) => {
+          const newDoc = {
+            title: newDocument.name,
+            path: response.data.filePath, // Ensure this is correct
+            status: "Pending",
+          };
+          setDocuments((prevDocs) => [...prevDocs, newDoc]);
+          setNewDocument(null);
+        })
+        .catch((error) => {
+          console.error("Error uploading document:", error);
+        });
+    }
+  };
+
+  const handleDocumentTitleChange = async (e, docId) => {
+    const newTitle = e.target.value;
+    const id = localStorage.getItem("farmer_id"); // Ensure this matches how you retrieve the farmer ID
+
+    console.log(`Updating document ${docId} with title: ${newTitle}`);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/updateDocument/${id}/${docId}`,
+        { title: newTitle }
+      );
+
+      if (response.status === 200) {
+        // Optionally, refetch documents to ensure data consistency
+        const fetchResponse = await axios.get(
+          `http://localhost:3000/farmer/${id}`
+        );
+        setDocuments(fetchResponse.data.documents || []);
+      } else {
+        console.error("Failed to update document title:", response.data);
+      }
+    } catch (error) {
+      console.error(
+        "Error updating document title:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const handleRemoveDocument = async (docId) => {
+    try {
+      const updatedDocs = documents.filter((doc) => doc._id !== docId);
+      setDocuments(updatedDocs);
+      // Optionally, send a request to the server to remove the document from the database
+    } catch (error) {
+      console.error("Error removing document:", error);
     }
   };
 
@@ -116,6 +165,7 @@ const FarmersPPFarmerPOV = () => {
               <div className="space-y-2">
                 <input
                   type="text"
+                  placeholder="Contact"
                   value={formData.contact}
                   onChange={(e) => handleChange(e, "contact")}
                   className="bg-gray-200 p-2 rounded block mx-auto"
@@ -123,19 +173,22 @@ const FarmersPPFarmerPOV = () => {
                 <input
                   type="text"
                   value={formData.email}
+                  placeholder="Email"
                   onChange={(e) => handleChange(e, "email")}
                   className="bg-gray-200 p-2 rounded block mx-auto"
                 />
                 <input
                   type="text"
                   value={formData.experience}
+                  placeholder="Experience"
                   onChange={(e) => handleChange(e, "experience")}
                   className="bg-gray-200 p-2 rounded block mx-auto"
                 />
                 <input
                   type="text"
-                  value={formData.location}
-                  onChange={(e) => handleChange(e, "location")}
+                  placeholder="Address"
+                  value={formData.address}
+                  onChange={(e) => handleChange(e, "address")}
                   className="bg-gray-200 p-2 rounded block mx-auto"
                 />
               </div>
@@ -151,7 +204,7 @@ const FarmersPPFarmerPOV = () => {
                   Experience: {formData.experience}
                 </p>
                 <p className="text-lg text-green-200">
-                  Location: {formData.location}
+                  Address: {formData.address}
                 </p>
               </div>
             )}
@@ -183,21 +236,52 @@ const FarmersPPFarmerPOV = () => {
             <div>
               <input
                 type="text"
+                placeholder="Info about farm like farm name, soil type, size of farm"
                 value={formData.farm}
                 onChange={(e) => handleChange(e, "farm")}
-                className="bg-gray-200 p-2 rounded block mb-2"
+                className="bg-gray-200 p-2 rounded block mb-2 w-full"
               />
               <input
                 type="text"
                 value={formData.methods}
                 onChange={(e) => handleChange(e, "methods")}
-                className="bg-gray-200 p-2 rounded block"
+                className="bg-gray-200 p-2 rounded block w-full"
               />
             </div>
           ) : (
             <div>
-              <p className="text-gray-600">Farm: {formData.farm}</p>
-              <p className="text-gray-600">Methods: {formData.methods}</p>
+              <p className="text-gray-600">Info About Farm: {formData.farm}</p>
+              <p className="text-gray-600">
+                Methods used for Farming: {formData.methods}
+              </p>
+            </div>
+          )}
+        </div>
+        {/* Crops */}
+        <div className="p-6 bg-gray-50 border-t border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Crops</h2>
+          {isEditing ? (
+            <div>
+              <input
+                type="text"
+                placeholder="Info about farm like farm name, soil type, size of farm"
+                // value={formData.farm}
+                // onChange={(e) => handleChange(e, "farm")}
+                className="bg-gray-200 p-2 rounded block mb-2 w-full"
+              />
+              <input
+                type="text"
+                // value={formData.methods}
+                // onChange={(e) => handleChange(e, "methods")}
+                className="bg-gray-200 p-2 rounded block w-full"
+              />
+            </div>
+          ) : (
+            <div>
+              {/* <p className="text-gray-600">Info About Farm: {formData.farm}</p> */}
+              <p className="text-gray-600">
+                {/* Methods used for Farming: {formData.methods} */}
+              </p>
             </div>
           )}
         </div>
@@ -226,8 +310,36 @@ const FarmersPPFarmerPOV = () => {
                     : "border-red-500"
                 }`}
               >
-                <h3 className="text-lg font-bold">{doc.title}</h3>
+                <h3 className="text-lg font-bold">
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={doc.title}
+                      onChange={(e) => handleDocumentTitleChange(e, doc._id)}
+                      disabled={!isEditing}
+                      className="bg-gray-200 p-2 rounded block w-full"
+                    />
+                  ) : (
+                    doc.title
+                  )}
+                </h3>
                 <p className="text-sm text-gray-600">{doc.status}</p>
+                {isEditing && (
+                  <button
+                    onClick={() => handleRemoveDocument(doc._id)}
+                    className="bg-red-500 text-white py-1 px-2 rounded mt-2"
+                  >
+                    Remove
+                  </button>
+                )}
+                <a
+                  href={`http://localhost:3000${doc.path}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline mt-2 block"
+                >
+                  View Document
+                </a>
               </div>
             ))}
           </div>
@@ -249,4 +361,4 @@ const FarmersPPFarmerPOV = () => {
   );
 };
 
-export default FarmersPPFarmerPOV;
+export default FarmerProfile;

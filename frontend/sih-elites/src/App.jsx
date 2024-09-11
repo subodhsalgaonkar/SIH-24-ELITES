@@ -15,7 +15,7 @@ import ContractForm from "./components/ContractForm";
 import RoleSelection from "./components/RoleSelection";
 import FarmerSignup from "./components/FarmerSignup";
 import BusinessSignup from "./components/BusinessSignup";
-import FarmersPPFarmerPOV from "./components/FarmersPPFarmerPOV";
+import FarmerProfile from "./components/FarmerProfile";
 import Notifications from "./components/Notifications";
 import NotificationsF from "./components/NotificationsF";
 import Signup from "./components/Signup";
@@ -49,7 +49,7 @@ function App() {
           <Route path="/create-contract" element={<ContractForm />} />
           <Route path="/seller" element={<SellerDashboard />} />
           <Route path="/contract/:id" element={<ContractDetailsPage />} />
-          <Route path="/farmerprofile" element={<FarmersPPFarmerPOV />} />
+          <Route path="/farmerprofile" element={<FarmerProfile />} />
           <Route path="/notificationsf" element={<NotificationsF />} />
         </Route>
       </Routes>

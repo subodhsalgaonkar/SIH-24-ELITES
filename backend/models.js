@@ -10,14 +10,28 @@ const FarmerSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    farm_name: {
+    farm: {
         type: String,
-        maxlength: 50
+        maxlength: 255
     },
-    image: {
-        type: String // Assuming the image URL is stored as a string
-    },
-    personal_info: {
+    documents: [
+        {
+            title: {
+                type: String,
+                required: true // Ensure title is provided
+            },
+            path: {
+                type: String,
+                required: true // Ensure path is provided
+            },
+            status: {
+                type: String,
+                default: 'Pending',
+                enum: ['Pending', 'Approved', 'Rejected'] // Example status options
+            }
+        }
+    ],
+    personalInfo: {
         type: String
     },
     address: {
@@ -28,7 +42,7 @@ const FarmerSchema = new Schema({
         type: Boolean,
         default: false
     },
-    methods_used: {
+    methods: {
         type: String
     },
     experience: {
@@ -200,20 +214,6 @@ const MessageSchema = new Schema({
     }
 });
 
-const DocumentSchema = new Schema({
-    document_url: {
-        type: String, // Assuming the document URL is stored as a string
-        required: true
-    },
-    verification_status: {
-        type: Boolean,
-        default: false
-    },
-    associated_id: {
-        type: Schema.Types.ObjectId,
-        required: true
-    }
-});
 
 const UserSchema = new Schema({
     username: {
@@ -234,7 +234,6 @@ const UserSchema = new Schema({
 });
 
 const User = model('User', UserSchema);
-const Document = model('Document', DocumentSchema);
 const Message = model('Message', MessageSchema);
 const Review = model('Review', ReviewSchema);
 const Crop = model('Crop', CropSchema);
@@ -242,4 +241,4 @@ const Contract = model('Contract', ContractSchema);
 const Buyer = model('Buyer', BuyerSchema);
 const Farmer = model('Farmer', FarmerSchema);
 
-export { Buyer, Farmer, Contract, Crop, Review, Message, Document, User };
+export { Buyer, Farmer, Contract, Crop, Review, Message, User };

@@ -1,7 +1,7 @@
 import { MongoClient } from 'mongodb';
 
-const uri = 'mongodb+srv://salgaonkarsubodh:Subodh@2004@sih-elites.zdjd4.mongodb.net/';
-// const uri = 'mongodb+srv://shintreaditya05:aditya@123@sih-elites.zdjd4.mongodb.net/';
+// const uri = 'mongodb+srv://salgaonkarsubodh:Subodh@2004@sih-elites.zdjd4.mongodb.net/';
+const uri = 'mongodb+srv://shintreaditya05:aditya@123@sih-elites.zdjd4.mongodb.net/';
 
 let db;
 
