@@ -12,6 +12,7 @@ const FarmerProfile = () => {
     image: null, // for file input
   });
 
+  const [editingCrop, setEditingCrop] = useState(null); // State for currently editing crop
   const [formData, setFormData] = useState({
     name: "",
     contact: "",
@@ -51,6 +52,21 @@ const FarmerProfile = () => {
     };
 
     fetchFarmerData();
+  }, [id]);
+
+  const fetchFarmerCrops = async () => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/crops/${id}`);
+      setCrops(response.data);
+    } catch (error) {
+      console.error("Error fetching farmer crops:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      fetchFarmerCrops();
+    }
   }, [id]);
 
   const handleEditClick = () => {
@@ -94,7 +110,7 @@ const FarmerProfile = () => {
         .then((response) => {
           const newDoc = {
             title: newDocument.name,
-            path: response.data.filePath, // Ensure this is correct
+            path: response.data.filePath,
             status: "Pending",
           };
           setDocuments((prevDocs) => [...prevDocs, newDoc]);
@@ -108,9 +124,6 @@ const FarmerProfile = () => {
 
   const handleDocumentTitleChange = async (e, docId) => {
     const newTitle = e.target.value;
-    const id = localStorage.getItem("farmer_id"); // Ensure this matches how you retrieve the farmer ID
-
-    console.log(`Updating document ${docId} with title: ${newTitle}`);
 
     try {
       const response = await axios.post(
@@ -119,7 +132,6 @@ const FarmerProfile = () => {
       );
 
       if (response.status === 200) {
-        // Optionally, refetch documents to ensure data consistency
         const fetchResponse = await axios.get(
           `http://localhost:3000/farmer/${id}`
         );
@@ -139,29 +151,10 @@ const FarmerProfile = () => {
     try {
       const updatedDocs = documents.filter((doc) => doc._id !== docId);
       setDocuments(updatedDocs);
-      // Optionally, send a request to the server to remove the document from the database
     } catch (error) {
       console.error("Error removing document:", error);
     }
   };
-
-const fetchFarmerCrops = async () => {
-  try {
-    console.log("Fetching crops for farmer_id:", id); // Log the ID to ensure it’s correct
-    const response = await axios.get(`http://localhost:3000/api/crops/${id}`);
-    console.log("Fetched crops:", response.data); // Log response data
-    setCrops(response.data);
-  } catch (error) {
-    console.error("Error fetching farmer crops:", error);
-  }
-};
-
-useEffect(() => {
-  if (id) {
-    fetchFarmerCrops();
-  }
-}, [id]);
-
 
   const handleCropChange = (e) => {
     const { name, value } = e.target;
@@ -178,11 +171,11 @@ useEffect(() => {
     formData.append("quantity", cropFormData.quantity);
     formData.append("phase", cropFormData.phase);
     formData.append("image", cropFormData.image);
-    formData.append("farmer_id", id); // sending farmer_id to link with the crop
+    formData.append("farmer_id", id);
 
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/addCrop", // Ensure route matches the backend
+        "http://localhost:3000/api/addCrop",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
@@ -190,11 +183,66 @@ useEffect(() => {
       );
 
       if (response.status === 200) {
-        setCrops((prevCrops) => [...prevCrops, response.data]); // Append new crop
-        setShowCropForm(false); // Close form
+        setCrops((prevCrops) => [...prevCrops, response.data]);
+        setShowCropForm(false);
       }
     } catch (error) {
       console.error("Error adding crop:", error);
+    }
+  };
+
+  const handleEditCrop = (crop) => {
+    setEditingCrop(crop);
+    setCropFormData({
+      name: crop.name,
+      quantity: crop.quantity,
+      phase: crop.phase,
+      image: null, // Handle image updates separately
+    });
+  };
+
+  const handleUpdateCrop = async () => {
+    const formData = new FormData();
+    formData.append("name", cropFormData.name);
+    formData.append("quantity", cropFormData.quantity);
+    formData.append("phase", cropFormData.phase);
+    formData.append("image", cropFormData.image || editingCrop.image); // Use existing image if no new image
+
+    try {
+      const response = await axios.put(
+        `http://localhost:3000/api/updateCrop/${editingCrop._id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response.status === 200) {
+        setCrops((prevCrops) =>
+          prevCrops.map((crop) =>
+            crop._id === editingCrop._id ? response.data : crop
+          )
+        );
+        setEditingCrop(null);
+        setCropFormData({
+          name: "",
+          quantity: "",
+          phase: "",
+          image: null,
+        });
+      }
+    } catch (error) {
+      console.error("Error updating crop:", error);
+    }
+  };
+  const handleRemoveCrop = async (cropId) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/crops/${cropId}`);
+      // Update the local state to remove the deleted crop
+      setCrops(crops.filter((crop) => crop._id !== cropId));
+    } catch (error) {
+      console.error("Error removing crop:", error);
+      // Handle error (e.g., show a message to the user)
     }
   };
 
@@ -319,90 +367,137 @@ useEffect(() => {
             </div>
           )}
         </div>
-        {/* Crops Section */}
-        <div className="p-6 bg-gray-50 border-t border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Crops</h2>
+        {/* Crop Section */}
+        <div className="p-8">
+          <h2 className="text-xl font-bold mb-4">Crops</h2>
           <button
-            className="bg-green-500 text-white py-1 px-2 rounded"
-            onClick={() => setShowCropForm(true)}
+            onClick={() => setShowCropForm(!showCropForm)}
+            className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
           >
-            Add Crop
+            {showCropForm ? "Cancel" : "Add Crop"}
           </button>
 
-          {/* Crop Cards */}
-          {crops.length === 0 ? (
-            <p>No crops available</p>
-          ) : (
-            <div className="flex flex-wrap gap-4 mt-4">
-              {crops.map((crop) => (
-                <div
-                  key={crop._id}
-                  className="border p-4 rounded bg-white shadow"
-                >
-                  <h3 className="text-lg font-bold">{crop.name}</h3>
-                  <img
-                    src={`http://localhost:3000/${crop.image}`}
-                    alt={crop.name}
-                    className="w-full h-32 object-cover"
-                  />
-                  <p>Quantity: {crop.quantity}</p>
-                  <p>Phase: {crop.phase || "Not specified"}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Crop Form Modal */}
-        {showCropForm && (
-          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded shadow-lg">
-              <h2 className="text-xl font-bold mb-4">Add New Crop</h2>
+          {showCropForm && (
+            <div className="mb-4">
               <input
                 type="text"
                 name="name"
-                placeholder="Crop Name"
                 value={cropFormData.name}
                 onChange={handleCropChange}
-                className="w-full mb-2 p-2 border rounded"
+                placeholder="Crop Name"
+                className="bg-gray-200 p-2 rounded mb-2 block w-full"
               />
               <input
                 type="number"
                 name="quantity"
-                placeholder="Quantity"
                 value={cropFormData.quantity}
                 onChange={handleCropChange}
-                className="w-full mb-2 p-2 border rounded"
+                placeholder="Quantity"
+                className="bg-gray-200 p-2 rounded mb-2 block w-full"
               />
               <input
                 type="text"
                 name="phase"
-                placeholder="Phase"
                 value={cropFormData.phase}
                 onChange={handleCropChange}
-                className="w-full mb-2 p-2 border rounded"
+                placeholder="Phase"
+                className="bg-gray-200 p-2 rounded mb-2 block w-full"
               />
               <input
                 type="file"
-                name="image"
                 onChange={handleFileChange2}
-                className="w-full mb-2 p-2 border rounded"
+                className="mb-2"
               />
               <button
                 onClick={handleAddCrop}
-                className="bg-green-500 text-white py-1 px-4 rounded"
+                className="bg-blue-500 text-white py-2 px-4 rounded"
               >
-                Save Crop
-              </button>
-              <button
-                onClick={() => setShowCropForm(false)}
-                className="bg-red-500 text-white py-1 px-4 rounded ml-2"
-              >
-                Cancel
+                Add Crop
               </button>
             </div>
+          )}
+
+          <div className="flex flex-wrap gap-6">
+            {crops.map((crop) => (
+              <div
+                key={crop._id}
+                className="border border-gray-300 p-6 rounded-lg shadow-md flex-1 max-w-xs" // Adjusted classes for card styling
+              >
+                {editingCrop && editingCrop._id === crop._id ? (
+                  <div>
+                    <input
+                      type="text"
+                      name="name"
+                      value={cropFormData.name}
+                      onChange={handleCropChange}
+                      placeholder="Crop Name"
+                      className="bg-gray-100 p-3 rounded mb-4 block w-full"
+                    />
+                    <input
+                      type="number"
+                      name="quantity"
+                      value={cropFormData.quantity}
+                      onChange={handleCropChange}
+                      placeholder="Quantity"
+                      className="bg-gray-100 p-3 rounded mb-4 block w-full"
+                    />
+                    <input
+                      type="text"
+                      name="phase"
+                      value={cropFormData.phase}
+                      onChange={handleCropChange}
+                      placeholder="Phase"
+                      className="bg-gray-100 p-3 rounded mb-4 block w-full"
+                    />
+                    <input
+                      type="file"
+                      onChange={handleFileChange2}
+                      className="mb-4"
+                    />
+                    <button
+                      onClick={handleUpdateCrop}
+                      className="bg-green-600 text-white py-2 px-5 rounded hover:bg-green-700"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <h3 className="text-xl font-semibold mb-2">{crop.name}</h3>
+                    <p className="text-gray-700 mb-2">
+                      Quantity: {crop.quantity}
+                    </p>
+                    <p className="text-gray-700 mb-4">Phase: {crop.phase}</p>
+                    {crop.image && (
+                      <img
+                        src={`http://localhost:3000${crop.image}`}
+                        alt="Crop Image"
+                        className="w-20 h-20 object-cover rounded-full mb-4 border border-gray-300"
+                      />
+                    )}
+                    {isEditing && (
+                      <div>
+                        <button
+                          onClick={() => handleEditCrop(crop)}
+                          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleRemoveCrop(crop._id)}
+                          className="bg-red-500 text-white py-2 px-4 rounded ml-2 hover:bg-red-600"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+
         {/* Documents Section */}
         <div className="p-6 bg-gray-50 border-t border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Documents</h2>
@@ -456,6 +551,13 @@ useEffect(() => {
               </div>
             ))}
           </div>
+          <button
+            onClick={handleSaveChanges}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+            style={{ display: isEditing ? "block" : "none" }}
+          >
+            Save Changes
+          </button>
         </div>
       </div>
     </div>

@@ -211,7 +211,6 @@ app.post('/updateDocument/:id/:docId', async (req, res) => {
 });
 
 // Route to add a crop
-// Route to add a crop
 app.post("/api/addCrop", upload.single("image"), async (req, res) => {
     const { name, quantity, phase, farmer_id } = req.body;
     const image = req.file ? `/uploads/${req.file.filename}` : null;
@@ -252,6 +251,53 @@ app.get('/api/crops/:farmer_id', async (req, res) => {
     } catch (error) {
         console.error("Error fetching crops:", error);
         res.status(500).json({ message: "Error fetching crops" });
+    }
+});
+
+// Route to update a crop
+app.put('/api/updateCrop/:id', upload.single('image'), async (req, res) => {
+    const { id } = req.params;
+    const { name, quantity, phase } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+    try {
+        // Find the crop by ID
+        const crop = await Crop.findById(id);
+        if (!crop) {
+            return res.status(404).json({ message: 'Crop not found' });
+        }
+
+        // Update crop details
+        crop.name = name || crop.name;
+        crop.quantity = quantity || crop.quantity;
+        crop.phase = phase || crop.phase;
+        crop.image = image || crop.image;
+
+        // Save the updated crop
+        const updatedCrop = await crop.save();
+
+        res.status(200).json(updatedCrop);
+    } catch (error) {
+        console.error('Error updating crop:', error);
+        res.status(500).json({ message: 'Error updating crop' });
+    }
+});
+
+// Route to delete a crop
+app.delete('/api/deleteCrop/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Find and delete the crop by ID
+        const result = await Crop.findByIdAndDelete(id);
+        if (!result) {
+            return res.status(404).json({ message: 'Crop not found' });
+        }
+
+        res.status(200).json({ message: 'Crop deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting crop:', error);
+        res.status(500).json({ message: 'Error deleting crop' });
     }
 });
 
