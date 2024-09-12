@@ -283,8 +283,8 @@ app.put('/api/updateCrop/:id', upload.single('image'), async (req, res) => {
     }
 });
 
-// Route to delete a crop
-app.delete('/api/deleteCrop/:id', async (req, res) => {
+// Update the route to match frontend
+app.delete('/api/crops/:id', async (req, res) => {
     const { id } = req.params;
 
     try {

@@ -426,6 +426,7 @@ const FarmerProfile = () => {
               </div>
             </div>
           )}
+
           <div className={`flex flex-wrap gap-2 ${isEditing ? "mb-8" : ""}`}>
             {crops.map((crop) => (
               <div
@@ -433,42 +434,52 @@ const FarmerProfile = () => {
                 className="relative border border-gray-300 p-2 rounded-lg shadow-md flex-shrink-0 w-36 h-40"
               >
                 {editingCrop && editingCrop._id === crop._id ? (
-                  <div>
-                    <input
-                      type="text"
-                      name="name"
-                      value={cropFormData.name}
-                      onChange={handleCropChange}
-                      placeholder="Crop Name"
-                      className="bg-gray-100 p-2 rounded mb-4 block w-full"
-                    />
-                    <input
-                      type="number"
-                      name="quantity"
-                      value={cropFormData.quantity}
-                      onChange={handleCropChange}
-                      placeholder="Quantity"
-                      className="bg-gray-100 p-2 rounded mb-4 block w-full"
-                    />
-                    <input
-                      type="text"
-                      name="phase"
-                      value={cropFormData.phase}
-                      onChange={handleCropChange}
-                      placeholder="Phase"
-                      className="bg-gray-100 p-2 rounded mb-4 block w-full"
-                    />
-                    <input
-                      type="file"
-                      onChange={handleFileChange2}
-                      className="mb-4"
-                    />
-                    <button
-                      onClick={handleUpdateCrop}
-                      className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
-                    >
-                      Save Changes
-                    </button>
+                  /* Modal for Editing Crop */
+                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
+                      <button
+                        onClick={() => setEditingCrop(null)}
+                        className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                      >
+                        &times;
+                      </button>
+                      <h2 className="text-lg font-semibold mb-4">Edit Crop</h2>
+                      <input
+                        type="text"
+                        name="name"
+                        value={cropFormData.name}
+                        onChange={handleCropChange}
+                        placeholder="Crop Name"
+                        className="bg-gray-200 p-2 rounded mb-2 block w-full"
+                      />
+                      <input
+                        type="number"
+                        name="quantity"
+                        value={cropFormData.quantity}
+                        onChange={handleCropChange}
+                        placeholder="Quantity"
+                        className="bg-gray-200 p-2 rounded mb-2 block w-full"
+                      />
+                      <input
+                        type="text"
+                        name="phase"
+                        value={cropFormData.phase}
+                        onChange={handleCropChange}
+                        placeholder="Phase"
+                        className="bg-gray-200 p-2 rounded mb-2 block w-full"
+                      />
+                      <input
+                        type="file"
+                        onChange={handleFileChange2}
+                        className="mb-2"
+                      />
+                      <button
+                        onClick={handleUpdateCrop}
+                        className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <div className="flex flex-col h-full">
