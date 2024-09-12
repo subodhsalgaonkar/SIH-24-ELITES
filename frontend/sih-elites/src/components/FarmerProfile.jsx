@@ -371,57 +371,66 @@ const FarmerProfile = () => {
         <div className="p-8">
           <h2 className="text-xl font-bold mb-4">Crops</h2>
           <button
-            onClick={() => setShowCropForm(!showCropForm)}
+            onClick={() => setShowCropForm(true)}
             className="bg-blue-500 text-white py-2 px-4 rounded mb-4"
           >
-            {showCropForm ? "Cancel" : "Add Crop"}
+            Add Crop
           </button>
 
+          {/* Modal for Adding Crop */}
           {showCropForm && (
-            <div className="mb-4">
-              <input
-                type="text"
-                name="name"
-                value={cropFormData.name}
-                onChange={handleCropChange}
-                placeholder="Crop Name"
-                className="bg-gray-200 p-2 rounded mb-2 block w-full"
-              />
-              <input
-                type="number"
-                name="quantity"
-                value={cropFormData.quantity}
-                onChange={handleCropChange}
-                placeholder="Quantity"
-                className="bg-gray-200 p-2 rounded mb-2 block w-full"
-              />
-              <input
-                type="text"
-                name="phase"
-                value={cropFormData.phase}
-                onChange={handleCropChange}
-                placeholder="Phase"
-                className="bg-gray-200 p-2 rounded mb-2 block w-full"
-              />
-              <input
-                type="file"
-                onChange={handleFileChange2}
-                className="mb-2"
-              />
-              <button
-                onClick={handleAddCrop}
-                className="bg-blue-500 text-white py-2 px-4 rounded"
-              >
-                Add Crop
-              </button>
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md relative">
+                <button
+                  onClick={() => setShowCropForm(false)}
+                  className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
+                >
+                  &times;
+                </button>
+                <h2 className="text-lg font-semibold mb-4">Add Crop</h2>
+                <input
+                  type="text"
+                  name="name"
+                  value={cropFormData.name}
+                  onChange={handleCropChange}
+                  placeholder="Crop Name"
+                  className="bg-gray-200 p-2 rounded mb-2 block w-full"
+                />
+                <input
+                  type="number"
+                  name="quantity"
+                  value={cropFormData.quantity}
+                  onChange={handleCropChange}
+                  placeholder="Quantity"
+                  className="bg-gray-200 p-2 rounded mb-2 block w-full"
+                />
+                <input
+                  type="text"
+                  name="phase"
+                  value={cropFormData.phase}
+                  onChange={handleCropChange}
+                  placeholder="Phase"
+                  className="bg-gray-200 p-2 rounded mb-2 block w-full"
+                />
+                <input
+                  type="file"
+                  onChange={handleFileChange2}
+                  className="mb-2"
+                />
+                <button
+                  onClick={handleAddCrop}
+                  className="bg-blue-500 text-white py-2 px-4 rounded"
+                >
+                  Add Crop
+                </button>
+              </div>
             </div>
           )}
-
-          <div className="flex flex-wrap gap-6">
+          <div className={`flex flex-wrap gap-2 ${isEditing ? "mb-8" : ""}`}>
             {crops.map((crop) => (
               <div
                 key={crop._id}
-                className="border border-gray-300 p-6 rounded-lg shadow-md flex-1 max-w-xs" // Adjusted classes for card styling
+                className="relative border border-gray-300 p-2 rounded-lg shadow-md flex-shrink-0 w-36 h-40"
               >
                 {editingCrop && editingCrop._id === crop._id ? (
                   <div>
@@ -431,7 +440,7 @@ const FarmerProfile = () => {
                       value={cropFormData.name}
                       onChange={handleCropChange}
                       placeholder="Crop Name"
-                      className="bg-gray-100 p-3 rounded mb-4 block w-full"
+                      className="bg-gray-100 p-2 rounded mb-4 block w-full"
                     />
                     <input
                       type="number"
@@ -439,7 +448,7 @@ const FarmerProfile = () => {
                       value={cropFormData.quantity}
                       onChange={handleCropChange}
                       placeholder="Quantity"
-                      className="bg-gray-100 p-3 rounded mb-4 block w-full"
+                      className="bg-gray-100 p-2 rounded mb-4 block w-full"
                     />
                     <input
                       type="text"
@@ -447,7 +456,7 @@ const FarmerProfile = () => {
                       value={cropFormData.phase}
                       onChange={handleCropChange}
                       placeholder="Phase"
-                      className="bg-gray-100 p-3 rounded mb-4 block w-full"
+                      className="bg-gray-100 p-2 rounded mb-4 block w-full"
                     />
                     <input
                       type="file"
@@ -456,14 +465,34 @@ const FarmerProfile = () => {
                     />
                     <button
                       onClick={handleUpdateCrop}
-                      className="bg-green-600 text-white py-2 px-5 rounded hover:bg-green-700"
+                      className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700"
                     >
                       Save Changes
                     </button>
                   </div>
                 ) : (
-                  <div>
-                    <h3 className="text-xl font-semibold mb-2">{crop.name}</h3>
+                  <div className="flex flex-col h-full">
+                    <div className="flex justify-between items-start">
+                      <h3 className="text-lg font-semibold mb-2">
+                        {crop.name}
+                      </h3>
+                      {isEditing && (
+                        <div className="flex flex-col gap-2">
+                          <button
+                            onClick={() => handleEditCrop(crop)}
+                            className="bg-yellow-500 text-white py-1 px-2 rounded hover:bg-yellow-600 text-xs"
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => handleRemoveCrop(crop._id)}
+                            className="bg-red-500 text-white py-1 px-2 rounded hover:bg-red-600 text-xs"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      )}
+                    </div>
                     <p className="text-gray-700 mb-2">
                       Quantity: {crop.quantity}
                     </p>
@@ -472,24 +501,8 @@ const FarmerProfile = () => {
                       <img
                         src={`http://localhost:3000${crop.image}`}
                         alt="Crop Image"
-                        className="w-20 h-20 object-cover rounded-full mb-4 border border-gray-300"
+                        className="w-20 h-18 object-cover rounded-full mb-4 border border-gray-300"
                       />
-                    )}
-                    {isEditing && (
-                      <div>
-                        <button
-                          onClick={() => handleEditCrop(crop)}
-                          className="bg-yellow-500 text-white py-2 px-4 rounded hover:bg-yellow-600"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleRemoveCrop(crop._id)}
-                          className="bg-red-500 text-white py-2 px-4 rounded ml-2 hover:bg-red-600"
-                        >
-                          Remove
-                        </button>
-                      </div>
                     )}
                   </div>
                 )}
