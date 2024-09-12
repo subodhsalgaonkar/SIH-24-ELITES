@@ -6,7 +6,7 @@ import path from 'path';
 import bcrypt from 'bcrypt'; // To hash passwords
 
 // Import the models from models.js
-import { Farmer, Buyer, User } from './models.js'; // Ensure this path is correct
+import { Farmer, Buyer, User, Crop } from './models.js'; // Ensure this path is correct
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -210,6 +210,50 @@ app.post('/updateDocument/:id/:docId', async (req, res) => {
     }
 });
 
+// Route to add a crop
+// Route to add a crop
+app.post("/api/addCrop", upload.single("image"), async (req, res) => {
+    const { name, quantity, phase, farmer_id } = req.body;
+    const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+    try {
+        // Create a new crop with the provided farmer_id
+        const newCrop = new Crop({
+            name,
+            quantity,
+            phase,
+            image,
+            farmer_id // Use the farmer_id directly from the request body
+        });
+
+        // Save the crop to the database
+        await newCrop.save();
+
+        res.status(200).json(newCrop); // Respond with the saved crop
+    } catch (error) {
+        console.error("Error adding crop:", error);
+        res.status(500).json({ message: "Error adding crop" });
+    }
+});
+
+
+// Route to fetch all crops for a specific farmer
+app.get('/api/crops/:farmer_id', async (req, res) => {
+    const { farmer_id } = req.params;
+
+    try {
+        const crops = await Crop.find({ farmer_id });
+
+        if (!crops || crops.length === 0) {
+            return res.status(404).json({ message: 'No crops found for this farmer' });
+        }
+
+        res.status(200).json(crops);
+    } catch (error) {
+        console.error("Error fetching crops:", error);
+        res.status(500).json({ message: "Error fetching crops" });
+    }
+});
 
 // Serve static files from 'uploads' directory
 app.use('/uploads', express.static('uploads'));

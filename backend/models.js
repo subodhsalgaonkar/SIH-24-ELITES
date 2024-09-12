@@ -159,7 +159,6 @@ const CropSchema = new Schema({
     },
     time_to_deliver: {
         type: Date,
-        required: true
     }
 });
 

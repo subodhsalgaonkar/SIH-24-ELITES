@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const FarmerProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [crops, setCrops] = useState([]);
+  const [showCropForm, setShowCropForm] = useState(false);
+  const [cropFormData, setCropFormData] = useState({
+    name: "",
+    quantity: "",
+    phase: "",
+    image: null, // for file input
+  });
+
   const [formData, setFormData] = useState({
     name: "",
     contact: "",
@@ -136,6 +145,59 @@ const FarmerProfile = () => {
     }
   };
 
+const fetchFarmerCrops = async () => {
+  try {
+    console.log("Fetching crops for farmer_id:", id); // Log the ID to ensure it’s correct
+    const response = await axios.get(`http://localhost:3000/api/crops/${id}`);
+    console.log("Fetched crops:", response.data); // Log response data
+    setCrops(response.data);
+  } catch (error) {
+    console.error("Error fetching farmer crops:", error);
+  }
+};
+
+useEffect(() => {
+  if (id) {
+    fetchFarmerCrops();
+  }
+}, [id]);
+
+
+  const handleCropChange = (e) => {
+    const { name, value } = e.target;
+    setCropFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleFileChange2 = (e) => {
+    setCropFormData((prevData) => ({ ...prevData, image: e.target.files[0] }));
+  };
+
+  const handleAddCrop = async () => {
+    const formData = new FormData();
+    formData.append("name", cropFormData.name);
+    formData.append("quantity", cropFormData.quantity);
+    formData.append("phase", cropFormData.phase);
+    formData.append("image", cropFormData.image);
+    formData.append("farmer_id", id); // sending farmer_id to link with the crop
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/addCrop", // Ensure route matches the backend
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response.status === 200) {
+        setCrops((prevCrops) => [...prevCrops, response.data]); // Append new crop
+        setShowCropForm(false); // Close form
+      }
+    } catch (error) {
+      console.error("Error adding crop:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-lime-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-screen w-full bg-white shadow-lg rounded-lg overflow-hidden">
@@ -257,105 +319,144 @@ const FarmerProfile = () => {
             </div>
           )}
         </div>
-        {/* Crops */}
+        {/* Crops Section */}
         <div className="p-6 bg-gray-50 border-t border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Crops</h2>
-          {isEditing ? (
-            <div>
-              <input
-                type="text"
-                placeholder="Info about farm like farm name, soil type, size of farm"
-                // value={formData.farm}
-                // onChange={(e) => handleChange(e, "farm")}
-                className="bg-gray-200 p-2 rounded block mb-2 w-full"
-              />
-              <input
-                type="text"
-                // value={formData.methods}
-                // onChange={(e) => handleChange(e, "methods")}
-                className="bg-gray-200 p-2 rounded block w-full"
-              />
-            </div>
+          <button
+            className="bg-green-500 text-white py-1 px-2 rounded"
+            onClick={() => setShowCropForm(true)}
+          >
+            Add Crop
+          </button>
+
+          {/* Crop Cards */}
+          {crops.length === 0 ? (
+            <p>No crops available</p>
           ) : (
-            <div>
-              {/* <p className="text-gray-600">Info About Farm: {formData.farm}</p> */}
-              <p className="text-gray-600">
-                {/* Methods used for Farming: {formData.methods} */}
-              </p>
+            <div className="flex flex-wrap gap-4 mt-4">
+              {crops.map((crop) => (
+                <div
+                  key={crop._id}
+                  className="border p-4 rounded bg-white shadow"
+                >
+                  <h3 className="text-lg font-bold">{crop.name}</h3>
+                  <img
+                    src={`http://localhost:3000/${crop.image}`}
+                    alt={crop.name}
+                    className="w-full h-32 object-cover"
+                  />
+                  <p>Quantity: {crop.quantity}</p>
+                  <p>Phase: {crop.phase || "Not specified"}</p>
+                </div>
+              ))}
             </div>
           )}
         </div>
 
+        {/* Crop Form Modal */}
+        {showCropForm && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded shadow-lg">
+              <h2 className="text-xl font-bold mb-4">Add New Crop</h2>
+              <input
+                type="text"
+                name="name"
+                placeholder="Crop Name"
+                value={cropFormData.name}
+                onChange={handleCropChange}
+                className="w-full mb-2 p-2 border rounded"
+              />
+              <input
+                type="number"
+                name="quantity"
+                placeholder="Quantity"
+                value={cropFormData.quantity}
+                onChange={handleCropChange}
+                className="w-full mb-2 p-2 border rounded"
+              />
+              <input
+                type="text"
+                name="phase"
+                placeholder="Phase"
+                value={cropFormData.phase}
+                onChange={handleCropChange}
+                className="w-full mb-2 p-2 border rounded"
+              />
+              <input
+                type="file"
+                name="image"
+                onChange={handleFileChange2}
+                className="w-full mb-2 p-2 border rounded"
+              />
+              <button
+                onClick={handleAddCrop}
+                className="bg-green-500 text-white py-1 px-4 rounded"
+              >
+                Save Crop
+              </button>
+              <button
+                onClick={() => setShowCropForm(false)}
+                className="bg-red-500 text-white py-1 px-4 rounded ml-2"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
         {/* Documents Section */}
         <div className="p-6 bg-gray-50 border-t border-gray-200">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Documents</h2>
+
           {isEditing && (
-            <div className="mb-4">
-              <input type="file" onChange={handleFileChange} className="mb-2" />
+            <>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                className="w-full mb-4 p-2 border rounded"
+              />
               <button
                 onClick={handleAddDocument}
-                className="bg-blue-500 text-white py-1 px-2 rounded"
+                className="bg-blue-500 text-white py-1 px-4 rounded"
               >
                 Add Document
               </button>
-            </div>
+            </>
           )}
-          <div className="flex flex-wrap gap-4">
-            {documents.map((doc, index) => (
+
+          {/* Display existing documents */}
+          <div className="flex flex-wrap gap-4 mt-4">
+            {documents.map((doc) => (
               <div
-                key={index}
-                className={`border p-4 rounded ${
-                  doc.status === "Verified"
-                    ? "border-green-500"
-                    : "border-red-500"
+                key={doc._id}
+                className={`border p-4 rounded bg-white shadow ${
+                  doc.status === "Pending"
+                    ? "border-red-500"
+                    : "border-gray-300"
                 }`}
               >
-                <h3 className="text-lg font-bold">
-                  {isEditing ? (
+                <h3 className="text-lg font-bold">{doc.title}</h3>
+                {/* <p>Path: {doc.path}</p> */}
+                <p>Status: {doc.status}</p>
+                {isEditing && (
+                  <>
                     <input
                       type="text"
-                      value={doc.title}
-                      onChange={(e) => handleDocumentTitleChange(e, doc._id)}
-                      disabled={!isEditing}
-                      className="bg-gray-200 p-2 rounded block w-full"
+                      defaultValue={doc.title}
+                      onBlur={(e) => handleDocumentTitleChange(e, doc._id)}
+                      className="border p-2 rounded mt-2 w-full"
                     />
-                  ) : (
-                    doc.title
-                  )}
-                </h3>
-                <p className="text-sm text-gray-600">{doc.status}</p>
-                {isEditing && (
-                  <button
-                    onClick={() => handleRemoveDocument(doc._id)}
-                    className="bg-red-500 text-white py-1 px-2 rounded mt-2"
-                  >
-                    Remove
-                  </button>
+                    <button
+                      onClick={() => handleRemoveDocument(doc._id)}
+                      className="bg-red-500 text-white py-1 px-4 rounded mt-2"
+                    >
+                      Remove
+                    </button>
+                  </>
                 )}
-                <a
-                  href={`http://localhost:3000${doc.path}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 underline mt-2 block"
-                >
-                  View Document
-                </a>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Save Changes Button */}
-        {isEditing && (
-          <div className="p-6 bg-gray-50 border-t border-gray-200 text-center">
-            <button
-              onClick={handleSaveChanges}
-              className="bg-green-500 text-white py-2 px-4 rounded"
-            >
-              Save Changes
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
