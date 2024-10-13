@@ -156,26 +156,35 @@ app.get('/buyer/:id', async (req, res) => {
     }
 });
 
-// Update farmer's documents
+// Update farmer's Profile
 app.post("/updateFarmer/:id", async (req, res) => {
     const { id } = req.params;
-    const { documents } = req.body; // Expecting documents to be an array of document objects
+    const { documents, ...otherFields } = req.body; // Expecting documents to be an array and other fields to update
+
     try {
         const farmer = await Farmer.findOne({ farmer_id: id });
         if (!farmer) {
             return res.status(404).json({ message: "Farmer not found" });
         }
 
-        // Update farmer's documents
-        farmer.documents = documents;
-        const updatedFarmer = await farmer.save();
+        // Update farmer's documents if needed
+        if (documents) {
+            farmer.documents = documents;
+        }
 
+        // Update other fields from req.body
+        Object.keys(otherFields).forEach((field) => {
+            farmer[field] = otherFields[field];
+        });
+
+        const updatedFarmer = await farmer.save();
         res.status(200).json(updatedFarmer);
     } catch (error) {
         console.error('Error updating farmer:', error);
         res.status(500).json({ message: "Error updating data" });
     }
 });
+
 
 // Update document title
 app.post('/updateDocument/:id/:docId', async (req, res) => {
